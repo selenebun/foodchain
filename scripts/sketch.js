@@ -2,9 +2,9 @@ var food;
 var prey;
 var pred;
 
-var foodCount = 20;
-var preyCount = 10;
-var predCount = 4;
+var foodCount = 30;
+var preyCount = 20;
+var predCount = 10;
 
 var selected = 'f';
 
@@ -86,7 +86,9 @@ function draw() {
         var fy = f.pos.y;
         if (sq(fx - cx) + sq(fy - cy) < sq(p.radius)) {
             f.kill();
-            prey.push(createEntity(cx, cy, preyTemplate));
+            var dx = cx + random(-20, 20);
+            var dy = cy + random(-20, 20);
+            prey.push(createEntity(dx, dy, preyTemplate));
         }
     }
 
@@ -106,8 +108,12 @@ function draw() {
         var by = b.pos.y;
         if (sq(bx - cx) + sq(by - cy) < sq(p.radius)) {
             b.kill();
-            food.push(createEntity(cx, cy, foodTemplate));
-            pred.push(createEntity(cx, cy, predTemplate));
+            var dx = cx + random(-20, 20);
+            var dy = cy + random(-20, 20);
+            food.push(createEntity(dx, dy, foodTemplate));
+            var dx = cx + random(-20, 20);
+            var dy = cy + random(-20, 20);
+            pred.push(createEntity(dx, dy, predTemplate));
         }
     }
 
