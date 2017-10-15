@@ -11,6 +11,7 @@ var fungusCount = 4;
 var missileCount = 4;
 
 var selected = 'f';
+var targetLines = false;
 
 
 // Misc functions
@@ -242,6 +243,10 @@ function keyPressed() {
         case 13:
             // Enter
             initCreatures();
+            break;
+        case 32:
+            // Space bar
+            targetLines = !targetLines;
             break;
         case 66:
             // B

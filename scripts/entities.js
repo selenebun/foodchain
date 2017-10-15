@@ -20,8 +20,10 @@ function steer(targets, avoid) {
     */
     if (targets.length !== 0) {
         var targ = this.getNearest(targets);
-        stroke(this.color[0], this.color[1], this.color[2], 127);
-        line(targ.pos.x, targ.pos.y, this.pos.x, this.pos.y);
+        if (targetLines) {
+            stroke(this.color[0], this.color[1], this.color[2], 127);
+            line(targ.pos.x, targ.pos.y, this.pos.x, this.pos.y);
+        }
         sum.add(this.target(targ, this.chasePriority));
     }
     // avoiding
