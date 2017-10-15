@@ -6,13 +6,17 @@ class Entity {
         this.alive = true;
         this.accAmt = 0;
         this.maxSpeed = 0;
+        this.maxNut = 50;
+        this.nutrition = 50;
+        this.starve = true;
 
-        this.color = 'rgb(0,0,0)';
+        this.color = [0, 0, 0];
         this.radius = 5;
     }
 
     draw() {
-        fill(this.color);
+        var alpha = this.nutrition / this.maxNut * 255;
+        fill(this.color[0], this.color[1], this.color[2], alpha);
         stroke(0);
         ellipse(this.pos.x, this.pos.y, this.radius * 2, this.radius * 2);
     }
@@ -71,5 +75,7 @@ class Entity {
         this.vel.add(this.acc);
         this.vel.limit(this.maxSpeed);
         this.pos.add(this.vel);
+        if (this.starve) this.nutrition--;
+        if (this.nutrition === 0) this.kill();
     }
 }

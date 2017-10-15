@@ -32,13 +32,16 @@ function steer(targets, avoid) {
 
 
 var foodTemplate = {
-    color: 'rgb(135,211,124)',
+    color: [135, 211, 124],
+    starve: false
 };
 
 var preyTemplate = {
     accAmt: 0.4,
     maxSpeed: 3,
-    color: 'rgb(82,179,217)',
+    maxNut: 200,
+    nutrition: 200,
+    color: [82, 179, 217],
     radius: 8,
     steer: steer
 };
@@ -46,7 +49,9 @@ var preyTemplate = {
 var predTemplate = {
     accAmt: 0.4,
     maxSpeed: 4,
-    color: 'rgb(207,0,15)',
+    maxNut: 400,
+    nutrition: 400,
+    color: [207, 0, 15],
     radius: 12,
     steer: steer
 };

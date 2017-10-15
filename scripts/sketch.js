@@ -87,6 +87,7 @@ function draw() {
         var fx = f.pos.x;
         var fy = f.pos.y;
         if (sq(fx - cx) + sq(fy - cy) < sq(p.radius)) {
+            this.nutrition += f.nutrition;
             f.kill();
             var dx = cx + random(-20, 20);
             var dy = cy + random(-20, 20);
@@ -110,6 +111,7 @@ function draw() {
         var bx = b.pos.x;
         var by = b.pos.y;
         if (sq(bx - cx) + sq(by - cy) < sq(p.radius)) {
+            this.nutrition += b.nutrition;
             b.kill();
             var dx = cx + random(-20, 20);
             var dy = cy + random(-20, 20);
