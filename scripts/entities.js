@@ -19,7 +19,10 @@ function steer(targets, avoid) {
     }
     */
     if (targets.length !== 0) {
-        sum.add(this.target(this.getNearest(targets), this.chasePriority));
+        var targ = this.getNearest(targets);
+        stroke(this.color[0], this.color[1], this.color[2], 127);
+        line(targ.pos.x, targ.pos.y, this.pos.x, this.pos.y);
+        sum.add(this.target(targ, this.chasePriority));
     }
     // avoiding
     for (var i = 0; i < avoid.length; ++i) {
