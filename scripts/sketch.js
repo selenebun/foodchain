@@ -65,6 +65,7 @@ function draw() {
 
     for (var i = 0; i < food.length; ++i) {
         var f = food[i];
+        f.edges();
         f.update();
         if (f.outsideBorders()) f.kill();
         f.draw();
@@ -73,6 +74,7 @@ function draw() {
     for (var i = 0; i < prey.length; ++i) {
         var p = prey[i];
         p.steer(food, pred.concat(prey));
+        p.edges();
         p.update();
         if (p.outsideBorders()) p.kill();
         p.draw();
@@ -95,6 +97,7 @@ function draw() {
     for (var i = 0; i < pred.length; ++i) {
         var p = pred[i];
         p.steer(prey, pred);
+        p.edges();
         p.update();
         if (p.outsideBorders()) p.kill();
         p.draw();

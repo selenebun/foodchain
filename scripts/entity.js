@@ -17,6 +17,23 @@ class Entity {
         ellipse(this.pos.x, this.pos.y, this.radius * 2, this.radius * 2);
     }
 
+    edges() {
+        var d = 20;
+        var a = 10;
+        if (this.pos.x < d) {
+            this.acc.add(a / (d - this.pos.x), 0).limit(this.accAmt);
+        }
+        if (this.pos.x > width - d) {
+            this.acc.add(-a / (-width + d + this.pos.x), 0).limit(this.accAmt);
+        }
+        if (this.pos.y < d) {
+            this.acc.add(0, a / (d - this.pos.y)).limit(this.accAmt);
+        }
+        if (this.pos.y > height - d) {
+            this.acc.add(0, -a / (-height + d + this.pos.y)).limit(this.accAmt);
+        }
+    }
+
     getNearest(entities) {
         var lowestDist = 1000000;
         var entity = entities[0];
