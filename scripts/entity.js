@@ -9,6 +9,8 @@ class Entity {
         this.maxNut = 50;
         this.nutrition = 50;
         this.starve = true;
+        this.chasePriority = 1;
+        this.fleePriority = -1;
 
         this.color = [0, 0, 0];
         this.radius = 5;

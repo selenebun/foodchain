@@ -1,10 +1,12 @@
 var food;
 var prey;
 var pred;
+var fungus;
 
 var foodCount = 30;
 var preyCount = 20;
 var predCount = 10;
+var fungusCount = 4;
 
 var selected = 'f';
 
@@ -32,6 +34,13 @@ function initCreatures() {
         var y = random(height);
         pred[i] = createEntity(x, y, predTemplate);
     }
+
+    fungus = []
+    for (var i = 0; i < fungusCount; ++i) {
+        var x = random(width);
+        var y = random(height);
+        fungus[i] = createEntity(x, y, fungusTemplate);
+    }
 }
 
 function removeDead() {
@@ -46,6 +55,10 @@ function removeDead() {
     for (var i = pred.length - 1; i >= 0; --i) {
         if (!pred[i].alive) pred.splice(i, 1);
     }
+
+    for (var i = fungus.length - 1; i >= 0; --i) {
+        if (!fungus[i].alive) fungus.splice(i, 1);
+    }
 }
 
 
@@ -59,9 +72,9 @@ function setup() {
 function draw() {
     background(255);
 
-    var total = food.length + prey.length + pred.length;
-    var numCreatures = prey.length + pred.length;
-    if (total <= 1 || total > 400 || numCreatures === 0) initCreatures();
+    var total = food.length + prey.length + pred.length + fungus.length;
+    var numCreatures = prey.length + pred.length + fungus.length;
+    if (total <= 1 || total > 800 || numCreatures === 0) initCreatures();
 
     for (var i = 0; i < food.length; ++i) {
         var f = food[i];
@@ -122,6 +135,32 @@ function draw() {
         }
     }
 
+    for (var i = 0; i < fungus.length; ++i) {
+        var p = fungus[i];
+        p.edges();
+        p.update();
+        if (p.outsideBorders()) p.kill();
+        p.draw();
+
+        // eating
+        if (prey.length === 0) continue;
+        var b = p.getNearest(prey);
+        var cx = p.pos.x;
+        var cy = p.pos.y;
+        var bx = b.pos.x;
+        var by = b.pos.y;
+        if (sq(bx - cx) + sq(by - cy) < sq(p.radius)) {
+            this.nutrition += b.nutrition;
+            b.kill();
+            var dx = cx + random(-20, 20);
+            var dy = cy + random(-20, 20);
+            food.push(createEntity(dx, dy, foodTemplate));
+            var dx = cx + random(-100, 100);
+            var dy = cy + random(-100, 100);
+            fungus.push(createEntity(dx, dy, fungusTemplate));
+        }
+    }
+
     removeDead();
 }
 
@@ -146,6 +185,10 @@ function keyPressed() {
             // P
             selected = 'p';
             break;
+        case 86:
+            // V
+            selected = 'v';
+            break;
     }
 }
 
@@ -159,6 +202,9 @@ function mousePressed() {
             break;
         case 'p':
             pred.push(createEntity(mouseX, mouseY, predTemplate));
+            break;
+        case 'v':
+            fungus.push(createEntity(mouseX, mouseY, fungusTemplate));
             break;
     }
 }

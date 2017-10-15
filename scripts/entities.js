@@ -19,14 +19,13 @@ function steer(targets, avoid) {
     }
     */
     if (targets.length !== 0) {
-        sum.add(this.target(this.getNearest(targets), 1));
+        sum.add(this.target(this.getNearest(targets), this.chasePriority));
     }
     // avoiding
     for (var i = 0; i < avoid.length; ++i) {
         if (avoid[i] === this) continue;
-        sum.add(this.target(avoid[i], -1));
+        sum.add(this.target(avoid[i], this.fleePriority));
     }
-    // TODO edge avoidance
     this.acc = sum.limit(this.accAmt);
 }
 
@@ -41,17 +40,27 @@ var preyTemplate = {
     maxSpeed: 3,
     maxNut: 200,
     nutrition: 200,
+    chasePriority: 2,
+    fleePriority: -1,
     color: [82, 179, 217],
     radius: 8,
     steer: steer
 };
 
 var predTemplate = {
-    accAmt: 0.4,
+    accAmt: 0.1,
     maxSpeed: 4,
     maxNut: 400,
     nutrition: 400,
+    chasePriority: 2,
     color: [207, 0, 15],
     radius: 12,
     steer: steer
+};
+
+var fungusTemplate = {
+    maxNut: 500,
+    nutrition: 500,
+    color: [102, 51, 153],
+    radius: 10
 };
