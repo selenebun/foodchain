@@ -11,6 +11,7 @@ class Entity {
         this.starve = true;
         this.chasePriority = 1;
         this.fleePriority = -1;
+        this.following;
 
         this.color = [0, 0, 0];
         this.radius = 5;

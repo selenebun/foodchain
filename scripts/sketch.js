@@ -2,11 +2,13 @@ var food;
 var prey;
 var pred;
 var fungus;
+var missile;
 
 var foodCount = 30;
 var preyCount = 20;
 var predCount = 10;
 var fungusCount = 4;
+var missileCount = 4;
 
 var selected = 'f';
 
@@ -41,6 +43,14 @@ function initCreatures() {
         var y = random(height);
         fungus[i] = createEntity(x, y, fungusTemplate);
     }
+
+    missile = [];
+    for (var i = 0; i < missileCount; ++i) {
+        var x = random(width);
+        var y = random(height);
+        missile[i] = createEntity(x, y, missileTemplate);
+        missile[i].following = random(prey);
+    }
 }
 
 function removeDead() {
@@ -59,6 +69,10 @@ function removeDead() {
     for (var i = fungus.length - 1; i >= 0; --i) {
         if (!fungus[i].alive) fungus.splice(i, 1);
     }
+
+    for (var i = missile.length - 1; i >= 0; --i) {
+        if (!missile[i].alive) missile.splice(i, 1);
+    }
 }
 
 
@@ -72,8 +86,10 @@ function setup() {
 function draw() {
     background(255);
 
-    var total = food.length + prey.length + pred.length + fungus.length;
-    var numCreatures = prey.length + pred.length + fungus.length;
+    var total = food.length + prey.length + pred.length + fungus.length +
+    missile.length;
+    var numCreatures = prey.length + pred.length + fungus.length + 
+    missile.length;
     if (total <= 1 || total > 800 || numCreatures === 0) initCreatures();
 
     for (var i = 0; i < food.length; ++i) {
@@ -129,9 +145,11 @@ function draw() {
             var dx = cx + random(-20, 20);
             var dy = cy + random(-20, 20);
             food.push(createEntity(dx, dy, foodTemplate));
-            var dx = cx + random(-20, 20);
-            var dy = cy + random(-20, 20);
-            pred.push(createEntity(dx, dy, predTemplate));
+            if (random(3) < 1) {
+                var dx = cx + random(-20, 20);
+                var dy = cy + random(-20, 20);
+                pred.push(createEntity(dx, dy, predTemplate));
+            }
         }
     }
 
@@ -161,6 +179,34 @@ function draw() {
         }
     }
 
+    for (var i = 0; i < missile.length; ++i) {
+        var p = missile[i];
+        p.steer([], pred.concat(fungus));
+        p.edges();
+        p.update();
+        if (p.outsideBorders()) p.kill();
+        p.draw();
+
+        // eating
+        if (prey.length === 0) continue;
+        var b = p.getNearest(prey);
+        var cx = p.pos.x;
+        var cy = p.pos.y;
+        var bx = b.pos.x;
+        var by = b.pos.y;
+        if (sq(bx - cx) + sq(by - cy) < sq(p.radius)) {
+            this.nutrition += b.nutrition;
+            b.kill();
+            if (random(2) < 1) {
+                var dx = cx + random(-20, 20);
+                var dy = cy + random(-20, 20);
+                var m = createEntity(dx, dy, missileTemplate);
+                m.following = random(prey);
+                missile.push(m);
+            }
+        }
+    }
+
     removeDead();
 }
 
@@ -181,6 +227,10 @@ function keyPressed() {
             // F
             selected = 'f';
             break;
+        case 77:
+            // M
+            selected = 'm';
+            break;
         case 80:
             // P
             selected = 'p';
@@ -199,6 +249,11 @@ function mousePressed() {
             break;
         case 'f':
             food.push(createEntity(mouseX, mouseY, foodTemplate));
+            break;
+        case 'm':
+            var m = createEntity(mouseX, mouseY, missileTemplate);
+            m.following = random(prey);
+            missile.push(m);
             break;
         case 'p':
             pred.push(createEntity(mouseX, mouseY, predTemplate));
