@@ -11,7 +11,6 @@ class Entity {
         this.starve = true;
         this.chasePriority = 1;
         this.fleePriority = -1;
-        this.following;
 
         this.color = [0, 0, 0];
         this.radius = 5;
@@ -25,20 +24,23 @@ class Entity {
     }
 
     edges() {
-        var d = 20;
-        var a = 10;
-        if (this.pos.x < d) {
-            this.acc.add(a / (d - this.pos.x), 0).limit(this.accAmt);
+        if (this.pos.x + this.radius > width) {
+            this.pos.x = width - this.radius;
+            this.vel.x *= -4;
         }
-        if (this.pos.x > width - d) {
-            this.acc.add(-a / (-width + d + this.pos.x), 0).limit(this.accAmt);
+        if (this.pos.x - this.radius < 0) {
+            this.pos.x = this.radius;
+            this.vel.x *= -4;
         }
-        if (this.pos.y < d) {
-            this.acc.add(0, a / (d - this.pos.y)).limit(this.accAmt);
+        if (this.pos.y + this.radius > height) {
+            this.pos.y = height - this.radius;
+            this.vel.y *= -4;
         }
-        if (this.pos.y > height - d) {
-            this.acc.add(0, -a / (-height + d + this.pos.y)).limit(this.accAmt);
+        if (this.pos.y - this.radius < 0) {
+            this.pos.y = this.radius;
+            this.vel.y *= -4;
         }
+        this.acc.add(createVector(width / 2, height / 2).sub(this.pos).mult(0.001));
     }
 
     getNearest(entities) {

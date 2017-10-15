@@ -29,29 +29,6 @@ function steer(targets, avoid) {
     this.acc = sum.limit(this.accAmt);
 }
 
-function trackTarget(targets, avoid) {
-    var sum = createVector(0, 0);
-    // pursuing targets
-    /*
-    for (var i = 0; i < targets.length; ++i) {
-        if (targets[i] === this) continue;
-        sum.add(this.target(targets[i], 1));
-    }
-    */
-    if (typeof this.following === 'undefined' || !this.following.alive) {
-        this.following = random(prey);
-    }
-    if (prey.length !== 0) {
-        sum.add(this.target(this.following, this.chasePriority));
-    }
-    // avoiding
-    for (var i = 0; i < avoid.length; ++i) {
-        if (avoid[i] === this) continue;
-        sum.add(this.target(avoid[i], this.fleePriority));
-    }
-    this.acc = sum.limit(this.accAmt);
-}
-
 
 var foodTemplate = {
     color: [135, 211, 124],
@@ -71,7 +48,7 @@ var preyTemplate = {
 };
 
 var predTemplate = {
-    accAmt: 0.1,
+    accAmt: 0.3,
     maxSpeed: 4,
     maxNut: 400,
     nutrition: 400,
@@ -92,10 +69,10 @@ var missileTemplate = {
     accAmt: 1,
     maxSpeed: 5,
     maxNut: 300,
-    nutrition: 300,
-    chasePriority: 1,
-    fleePriority: -0.5,
+    nutrition: 200,
+    chasePriority: 2,
+    fleePriority: -1,
     color: [249, 191, 59],
     radius: 8,
-    steer: trackTarget
+    steer: steer
 };

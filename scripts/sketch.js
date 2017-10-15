@@ -48,12 +48,7 @@ function initCreatures() {
     for (var i = 0; i < missileCount; ++i) {
         var x = random(width);
         var y = random(height);
-        var m = createEntity(x, y, missileTemplate);
-        m.following = random(prey);
-        while (!m.following.alive) {
-            m.following = random(prey);
-        }
-        missile[i] = m;
+        missile[i] = createEntity(x, y, missileTemplate);
     }
 }
 
@@ -75,7 +70,14 @@ function removeDead() {
     }
 
     for (var i = missile.length - 1; i >= 0; --i) {
-        if (!missile[i].alive) missile.splice(i, 1);
+        if (!missile[i].alive) {
+            if (random(3) < 2) {
+                var x = missile[i].pos.x;
+                var y = missile[i].pos.y;
+                fungus.push(createEntity(x, y, fungusTemplate))
+            }
+            missile.splice(i, 1);
+        }
     }
 }
 
@@ -94,6 +96,10 @@ function draw() {
     missile.length;
     var numCreatures = prey.length + pred.length + missile.length;
     if (total <= 1 || total > 800 || numCreatures === 0) initCreatures();
+
+    if (random(20) < 1) {
+        food.push(createEntity(random(width), random(height), foodTemplate));
+    }
 
     for (var i = 0; i < food.length; ++i) {
         var f = food[i];
@@ -129,29 +135,47 @@ function draw() {
 
     for (var i = 0; i < pred.length; ++i) {
         var p = pred[i];
-        p.steer(prey, pred);
+        p.steer(prey.concat(missile), pred);
         p.edges();
         p.update();
         if (p.outsideBorders()) p.kill();
         p.draw();
 
         // eating
-        if (prey.length === 0) continue;
-        var b = p.getNearest(prey);
-        var cx = p.pos.x;
-        var cy = p.pos.y;
-        var bx = b.pos.x;
-        var by = b.pos.y;
-        if (sq(bx - cx) + sq(by - cy) < sq(p.radius)) {
-            this.nutrition += b.nutrition;
-            b.kill();
-            var dx = cx + random(-20, 20);
-            var dy = cy + random(-20, 20);
-            food.push(createEntity(dx, dy, foodTemplate));
-            if (random(3) < 1) {
+        if (prey.length !== 0) {
+            var b = p.getNearest(prey);
+            var cx = p.pos.x;
+            var cy = p.pos.y;
+            var bx = b.pos.x;
+            var by = b.pos.y;
+            if (sq(bx - cx) + sq(by - cy) < sq(p.radius)) {
+                this.nutrition += b.nutrition;
+                b.kill();
                 var dx = cx + random(-20, 20);
                 var dy = cy + random(-20, 20);
-                pred.push(createEntity(dx, dy, predTemplate));
+                food.push(createEntity(dx, dy, foodTemplate));
+                if (random(2) < 1) {
+                    var dx = cx + random(-20, 20);
+                    var dy = cy + random(-20, 20);
+                    pred.push(createEntity(dx, dy, predTemplate));
+                }
+            }
+        }
+
+        if (missile.length !== 0) {
+            var b = p.getNearest(missile);
+            var cx = p.pos.x;
+            var cy = p.pos.y;
+            var bx = b.pos.x;
+            var by = b.pos.y;
+            if (sq(bx - cx) + sq(by - cy) < sq(p.radius)) {
+                this.nutrition += b.nutrition;
+                b.kill();
+                if (random(2) < 1) {
+                    var dx = cx + random(-20, 20);
+                    var dy = cy + random(-20, 20);
+                    pred.push(createEntity(dx, dy, predTemplate));
+                }
             }
         }
     }
@@ -184,15 +208,15 @@ function draw() {
 
     for (var i = 0; i < missile.length; ++i) {
         var p = missile[i];
-        p.steer([], fungus);
+        p.steer(fungus, pred.concat(missile));
         p.edges();
         p.update();
         if (p.outsideBorders()) p.kill();
         p.draw();
 
         // eating
-        if (prey.length === 0) continue;
-        var b = p.getNearest(prey);
+        if (fungus.length === 0) continue;
+        var b = p.getNearest(fungus);
         var cx = p.pos.x;
         var cy = p.pos.y;
         var bx = b.pos.x;
@@ -200,16 +224,10 @@ function draw() {
         if (sq(bx - cx) + sq(by - cy) < sq(p.radius)) {
             this.nutrition += b.nutrition;
             b.kill();
-            if (random(3) < 2) {
-                var dx = cx + random(-20, 20);
-                var dy = cy + random(-20, 20);
-                var m = createEntity(dx, dy, missileTemplate);
-                m.following = random(prey);
-                while (!m.following.alive) {
-                    m.following = random(prey);
-                }
-                missile.push(m);
-            }
+            var dx = cx + random(-20, 20);
+            var dy = cy + random(-20, 20);
+            var m = createEntity(dx, dy, missileTemplate);
+            missile.push(m);
         }
     }
 
@@ -257,13 +275,7 @@ function mousePressed() {
             food.push(createEntity(mouseX, mouseY, foodTemplate));
             break;
         case 'm':
-            var m = createEntity(mouseX, mouseY, missileTemplate);
-            missile.push(m);
-            m.following = random(prey);
-            if (typeof m.following === 'undefined') return;
-            while (!m.following.alive) {
-                m.following = random(prey);
-            }
+            missile.push(createEntity(mouseX, mouseY, missileTemplate));
             break;
         case 'p':
             pred.push(createEntity(mouseX, mouseY, predTemplate));
