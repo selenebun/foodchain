@@ -90,11 +90,11 @@ var fungusTemplate = {
 
 var missileTemplate = {
     accAmt: 1,
-    maxSpeed: 5,
+    maxSpeed: 3,
     maxNut: 300,
     nutrition: 300,
     chasePriority: 1,
-    fleePriority: -1,
+    fleePriority: -0.5,
     color: [249, 191, 59],
     radius: 8,
     steer: trackTarget

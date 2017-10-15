@@ -184,7 +184,7 @@ function draw() {
 
     for (var i = 0; i < missile.length; ++i) {
         var p = missile[i];
-        p.steer([], pred.concat(fungus));
+        p.steer([], fungus);
         p.edges();
         p.update();
         if (p.outsideBorders()) p.kill();
@@ -200,7 +200,7 @@ function draw() {
         if (sq(bx - cx) + sq(by - cy) < sq(p.radius)) {
             this.nutrition += b.nutrition;
             b.kill();
-            if (random(2) < 1) {
+            if (random(3) < 2) {
                 var dx = cx + random(-20, 20);
                 var dy = cy + random(-20, 20);
                 var m = createEntity(dx, dy, missileTemplate);
