@@ -90,7 +90,7 @@ var fungusTemplate = {
 
 var missileTemplate = {
     accAmt: 1,
-    maxSpeed: 3,
+    maxSpeed: 5,
     maxNut: 300,
     nutrition: 300,
     chasePriority: 1,
