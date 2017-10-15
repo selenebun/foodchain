@@ -24,7 +24,7 @@ function steer(targets, avoid) {
     // avoiding
     for (var i = 0; i < avoid.length; ++i) {
         if (avoid[i] === this) continue;
-        sum.add(this.target(avoid[i], -10));
+        sum.add(this.target(avoid[i], -4));
     }
     // TODO edge avoidance
     this.acc = sum.limit(this.accAmt);
