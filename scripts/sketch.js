@@ -48,8 +48,12 @@ function initCreatures() {
     for (var i = 0; i < missileCount; ++i) {
         var x = random(width);
         var y = random(height);
-        missile[i] = createEntity(x, y, missileTemplate);
-        missile[i].following = random(prey);
+        var m = createEntity(x, y, missileTemplate);
+        m.following = random(prey);
+        while (!m.following.alive) {
+            m.following = random(prey);
+        }
+        missile[i] = m;
     }
 }
 
@@ -88,8 +92,7 @@ function draw() {
 
     var total = food.length + prey.length + pred.length + fungus.length +
     missile.length;
-    var numCreatures = prey.length + pred.length + fungus.length + 
-    missile.length;
+    var numCreatures = prey.length + pred.length + missile.length;
     if (total <= 1 || total > 800 || numCreatures === 0) initCreatures();
 
     for (var i = 0; i < food.length; ++i) {
@@ -202,6 +205,9 @@ function draw() {
                 var dy = cy + random(-20, 20);
                 var m = createEntity(dx, dy, missileTemplate);
                 m.following = random(prey);
+                while (!m.following.alive) {
+                    m.following = random(prey);
+                }
                 missile.push(m);
             }
         }
@@ -252,8 +258,12 @@ function mousePressed() {
             break;
         case 'm':
             var m = createEntity(mouseX, mouseY, missileTemplate);
-            m.following = random(prey);
             missile.push(m);
+            m.following = random(prey);
+            if (typeof m.following === 'undefined') return;
+            while (!m.following.alive) {
+                m.following = random(prey);
+            }
             break;
         case 'p':
             pred.push(createEntity(mouseX, mouseY, predTemplate));
