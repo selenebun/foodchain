@@ -53,11 +53,12 @@ var preyTemplate = {
 };
 
 var predTemplate = {
-    accAmt: 0.3,
+    accAmt: 0.4,
     maxSpeed: 4,
-    maxNut: 400,
-    nutrition: 400,
-    chasePriority: 2,
+    maxNut: 500,
+    nutrition: 500,
+    chasePriority: 4,
+    fleePriority: 0,
     color: [207, 0, 15],
     radius: 12,
     steer: steer
@@ -65,7 +66,7 @@ var predTemplate = {
 
 var fungusTemplate = {
     maxNut: 500,
-    nutrition: 500,
+    nutrition: 300,
     color: [102, 51, 153],
     radius: 10
 };
@@ -74,7 +75,7 @@ var missileTemplate = {
     accAmt: 1,
     maxSpeed: 5,
     maxNut: 300,
-    nutrition: 200,
+    nutrition: 300,
     chasePriority: 2,
     fleePriority: -1,
     color: [249, 191, 59],

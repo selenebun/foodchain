@@ -10,7 +10,7 @@ var predCount = 10;
 var fungusCount = 4;
 var missileCount = 4;
 
-var selected = 'f';
+var selected = 'b';
 var targetLines = false;
 
 
@@ -63,11 +63,23 @@ function removeDead() {
     }
 
     for (var i = pred.length - 1; i >= 0; --i) {
-        if (!pred[i].alive) pred.splice(i, 1);
+        if (!pred[i].alive) {
+            if (random(3) < 2) {
+                var x = pred[i].pos.x + random(-20, 20);
+                var y = pred[i].pos.y + random(-20, 20);
+                food.push(createEntity(x, y, foodTemplate))
+            }
+            pred.splice(i, 1);
+        }
     }
 
     for (var i = fungus.length - 1; i >= 0; --i) {
-        if (!fungus[i].alive) fungus.splice(i, 1);
+        if (!fungus[i].alive) {
+            var x = fungus[i].pos.x;
+            var y = fungus[i].pos.y;
+            food.push(createEntity(x, y, foodTemplate))
+            fungus.splice(i, 1);
+        }
     }
 
     for (var i = missile.length - 1; i >= 0; --i) {
@@ -95,8 +107,9 @@ function draw() {
 
     var total = food.length + prey.length + pred.length + fungus.length +
     missile.length;
-    var numCreatures = prey.length + pred.length + missile.length;
-    if (total <= 1 || total > 800 || numCreatures === 0) initCreatures();
+    var numCreatures = prey.length + pred.length + missile.length +
+    fungus.length;
+    if (total <= 1 || total > 600 || numCreatures === 0) initCreatures();
 
     if (random(20) < 1) {
         food.push(createEntity(random(width), random(height), foodTemplate));
@@ -136,7 +149,7 @@ function draw() {
 
     for (var i = 0; i < pred.length; ++i) {
         var p = pred[i];
-        p.steer(prey.concat(missile), pred);
+        p.steer(prey.concat(missile), []);
         p.edges();
         p.update();
         if (p.outsideBorders()) p.kill();
@@ -152,10 +165,7 @@ function draw() {
             if (sq(bx - cx) + sq(by - cy) < sq(p.radius)) {
                 this.nutrition += b.nutrition;
                 b.kill();
-                var dx = cx + random(-20, 20);
-                var dy = cy + random(-20, 20);
-                food.push(createEntity(dx, dy, foodTemplate));
-                if (random(2) < 1) {
+                if (random(3) < 1) {
                     var dx = cx + random(-20, 20);
                     var dy = cy + random(-20, 20);
                     pred.push(createEntity(dx, dy, predTemplate));
@@ -163,21 +173,18 @@ function draw() {
             }
         }
 
-        if (missile.length !== 0) {
-            var b = p.getNearest(missile);
-            var cx = p.pos.x;
-            var cy = p.pos.y;
-            var bx = b.pos.x;
-            var by = b.pos.y;
-            if (sq(bx - cx) + sq(by - cy) < sq(p.radius)) {
-                this.nutrition += b.nutrition;
-                b.kill();
-                if (random(2) < 1) {
-                    var dx = cx + random(-20, 20);
-                    var dy = cy + random(-20, 20);
-                    pred.push(createEntity(dx, dy, predTemplate));
-                }
-            }
+        if (missile.length === 0) continue;
+        var b = p.getNearest(missile);
+        var cx = p.pos.x;
+        var cy = p.pos.y;
+        var bx = b.pos.x;
+        var by = b.pos.y;
+        if (sq(bx - cx) + sq(by - cy) < sq(p.radius)) {
+            this.nutrition += b.nutrition;
+            b.kill();
+            var dx = cx + random(-20, 20);
+            var dy = cy + random(-20, 20);
+            pred.push(createEntity(dx, dy, predTemplate));
         }
     }
 
@@ -198,9 +205,11 @@ function draw() {
         if (sq(bx - cx) + sq(by - cy) < sq(p.radius)) {
             this.nutrition += b.nutrition;
             b.kill();
-            var dx = cx + random(-20, 20);
-            var dy = cy + random(-20, 20);
-            food.push(createEntity(dx, dy, foodTemplate));
+            if (random(2) < 1) {
+                var dx = cx + random(-20, 20);
+                var dy = cy + random(-20, 20);
+                food.push(createEntity(dx, dy, foodTemplate));
+            }
             var dx = cx + random(-100, 100);
             var dy = cy + random(-100, 100);
             fungus.push(createEntity(dx, dy, fungusTemplate));
@@ -209,11 +218,28 @@ function draw() {
 
     for (var i = 0; i < missile.length; ++i) {
         var p = missile[i];
-        p.steer(fungus, pred.concat(missile));
+        p.steer(fungus.concat(prey), pred.concat(missile));
         p.edges();
         p.update();
         if (p.outsideBorders()) p.kill();
         p.draw();
+
+        if (prey.length !== 0) {
+            var b = p.getNearest(prey);
+            var cx = p.pos.x;
+            var cy = p.pos.y;
+            var bx = b.pos.x;
+            var by = b.pos.y;
+            if (sq(bx - cx) + sq(by - cy) < sq(p.radius)) {
+                this.nutrition += b.nutrition;
+                b.kill();
+                if (random(3) < 1) {
+                    var dx = cx + random(-20, 20);
+                    var dy = cy + random(-20, 20);
+                    missile.push(createEntity(dx, dy, missileTemplate));
+                }
+            }
+        }
 
         // eating
         if (fungus.length === 0) continue;
@@ -225,10 +251,11 @@ function draw() {
         if (sq(bx - cx) + sq(by - cy) < sq(p.radius)) {
             this.nutrition += b.nutrition;
             b.kill();
-            var dx = cx + random(-20, 20);
-            var dy = cy + random(-20, 20);
-            var m = createEntity(dx, dy, missileTemplate);
-            missile.push(m);
+            if (random(2) < 1) {
+                var dx = cx + random(-20, 20);
+                var dy = cy + random(-20, 20);
+                missile.push(createEntity(dx, dy, missileTemplate));
+            }
         }
     }
 
