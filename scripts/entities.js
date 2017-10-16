@@ -1,6 +1,7 @@
 function createEntity(x, y, template) {
     var e = new Entity(x, y);
     var keys = Object.keys(template);
+    e.maxNut = template.nutrition;
     for (var i = 0; i < keys.length; ++i) {
         var key = keys[i];
         e[key] = template[key];
@@ -37,7 +38,6 @@ function steer(targets, avoid) {
 
 var foodTemplate = {
     color: [135, 211, 124],
-    maxNut: 1000,
     nutrition: 1000,
     starve: true
 };
@@ -45,7 +45,6 @@ var foodTemplate = {
 var preyTemplate = {
     accAmt: 0.5,
     maxSpeed: 3,
-    maxNut: 400,
     nutrition: 400,
     chasePriority: 2,
     fleePriority: -1,
@@ -57,7 +56,6 @@ var preyTemplate = {
 var predTemplate = {
     accAmt: 0.4,
     maxSpeed: 4,
-    maxNut: 2000,
     nutrition: 2000,
     chasePriority: 4,
     fleePriority: -0.5,
@@ -67,7 +65,6 @@ var predTemplate = {
 };
 
 var fungusTemplate = {
-    maxNut: 500,
     nutrition: 500,
     color: [102, 51, 153],
     radius: 10
@@ -76,7 +73,6 @@ var fungusTemplate = {
 var missileTemplate = {
     accAmt: 1,
     maxSpeed: 5,
-    maxNut: 300,
     nutrition: 300,
     chasePriority: 2,
     fleePriority: -0.5,
