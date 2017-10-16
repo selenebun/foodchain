@@ -37,14 +37,16 @@ function steer(targets, avoid) {
 
 var foodTemplate = {
     color: [135, 211, 124],
-    starve: false
+    maxNut: 1000,
+    nutrition: 1000,
+    starve: true
 };
 
 var preyTemplate = {
     accAmt: 0.5,
     maxSpeed: 3,
-    maxNut: 200,
-    nutrition: 200,
+    maxNut: 400,
+    nutrition: 400,
     chasePriority: 2,
     fleePriority: -1,
     color: [82, 179, 217],
@@ -55,10 +57,10 @@ var preyTemplate = {
 var predTemplate = {
     accAmt: 0.4,
     maxSpeed: 4,
-    maxNut: 500,
-    nutrition: 500,
+    maxNut: 2000,
+    nutrition: 2000,
     chasePriority: 4,
-    fleePriority: 0,
+    fleePriority: -0.5,
     color: [207, 0, 15],
     radius: 12,
     steer: steer
@@ -77,22 +79,8 @@ var missileTemplate = {
     maxNut: 300,
     nutrition: 300,
     chasePriority: 2,
-    fleePriority: -1,
+    fleePriority: -0.5,
     color: [249, 191, 59],
     radius: 8,
     steer: steer
 };
-
-
-
-// new prey idea:
-/*
-yeah maybe
-idk what though
-orange would be a good color for them
-maybe a big prey
-that can only be eaten by the main predator
-and can eat fungus or something
-idk
-not doing it tonight probably
-*/

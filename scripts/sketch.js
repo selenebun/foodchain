@@ -7,8 +7,8 @@ var missile;
 var foodCount = 30;
 var preyCount = 20;
 var predCount = 10;
-var fungusCount = 4;
-var missileCount = 4;
+var fungusCount = 0;//4;
+var missileCount = 0;//4;
 
 var selected = 'b';
 var targetLines = false;
@@ -107,11 +107,10 @@ function draw() {
 
     var total = food.length + prey.length + pred.length + fungus.length +
     missile.length;
-    var numCreatures = prey.length + pred.length + missile.length +
-    fungus.length;
-    if (total <= 1 || total > 600 || numCreatures === 0) initCreatures();
+    var numCreatures = prey.length + pred.length + missile.length;
+    if (total <= 1 || total > 800 || numCreatures === 0) initCreatures();
 
-    if (random(20) < 1) {
+    if (random(5) < 1) {
         food.push(createEntity(random(width), random(height), foodTemplate));
     }
 
@@ -143,7 +142,10 @@ function draw() {
             f.kill();
             var dx = cx + random(-20, 20);
             var dy = cy + random(-20, 20);
-            prey.push(createEntity(dx, dy, preyTemplate));
+            prey.push(createEntity(dx, dy, preyTemplate));/*
+	    var dx = cx + random(-20, 20);
+            var dy = cy + random(-20, 20);
+            prey.push(createEntity(dx, dy, preyTemplate));*/
         }
     }
 
@@ -163,13 +165,15 @@ function draw() {
             var bx = b.pos.x;
             var by = b.pos.y;
             if (sq(bx - cx) + sq(by - cy) < sq(p.radius)) {
+                p.vel.mult(0);
+                if (random(5) < 1) {
                 this.nutrition += b.nutrition;
                 b.kill();
                 if (random(3) < 1) {
                     var dx = cx + random(-20, 20);
                     var dy = cy + random(-20, 20);
                     pred.push(createEntity(dx, dy, predTemplate));
-                }
+                }}
             }
         }
 
@@ -180,12 +184,14 @@ function draw() {
         var bx = b.pos.x;
         var by = b.pos.y;
         if (sq(bx - cx) + sq(by - cy) < sq(p.radius)) {
+            p.vel.mult(0);
+            if (random(5) < 1) {
             this.nutrition += b.nutrition;
             b.kill();
             var dx = cx + random(-20, 20);
             var dy = cy + random(-20, 20);
             pred.push(createEntity(dx, dy, predTemplate));
-        }
+        }}
     }
 
     for (var i = 0; i < fungus.length; ++i) {
@@ -210,20 +216,22 @@ function draw() {
                 var dy = cy + random(-20, 20);
                 food.push(createEntity(dx, dy, foodTemplate));
             }
-            var dx = cx + random(-100, 100);
-            var dy = cy + random(-100, 100);
-            fungus.push(createEntity(dx, dy, fungusTemplate));
+            if (p.nutrition > 300) {
+            	var dx = cx + random(-100, 100);
+            	var dy = cy + random(-100, 100);
+            	fungus.push(createEntity(dx, dy, fungusTemplate));
+            }
         }
     }
 
     for (var i = 0; i < missile.length; ++i) {
         var p = missile[i];
-        p.steer(fungus.concat(prey), pred.concat(missile));
+        p.steer(fungus/*.concat(prey)*/, pred.concat(missile));
         p.edges();
         p.update();
         if (p.outsideBorders()) p.kill();
         p.draw();
-
+	/*
         if (prey.length !== 0) {
             var b = p.getNearest(prey);
             var cx = p.pos.x;
@@ -240,7 +248,7 @@ function draw() {
                 }
             }
         }
-
+	*/
         // eating
         if (fungus.length === 0) continue;
         var b = p.getNearest(fungus);
@@ -251,11 +259,14 @@ function draw() {
         if (sq(bx - cx) + sq(by - cy) < sq(p.radius)) {
             this.nutrition += b.nutrition;
             b.kill();
-            if (random(2) < 1) {
+            //if (random(2) < 1) {
                 var dx = cx + random(-20, 20);
                 var dy = cy + random(-20, 20);
                 missile.push(createEntity(dx, dy, missileTemplate));
-            }
+		var dx = cx + random(-20, 20);
+                var dy = cy + random(-20, 20);
+                missile.push(createEntity(dx, dy, missileTemplate));
+            //}
         }
     }
 
