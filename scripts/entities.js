@@ -66,7 +66,7 @@ var predTemplate = {
 
 var fungusTemplate = {
     maxNut: 500,
-    nutrition: 300,
+    nutrition: 500,
     color: [102, 51, 153],
     radius: 10
 };
@@ -82,3 +82,17 @@ var missileTemplate = {
     radius: 8,
     steer: steer
 };
+
+
+
+// new prey idea:
+/*
+yeah maybe
+idk what though
+orange would be a good color for them
+maybe a big prey
+that can only be eaten by the main predator
+and can eat fungus or something
+idk
+not doing it tonight probably
+*/
