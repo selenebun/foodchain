@@ -7,6 +7,7 @@ var numPrey = 20;
 var numPred = 10;
 var numTurret = 0;
 var numHive = 0;
+var numFungus = 0;
 
 var chaseLines = false;
 var fleeLines = false;
@@ -43,6 +44,11 @@ function initEntities() {
         var x = random(width);
         var y = random(height);
         entities.push(createEntity(x, y, hiveTemplate));
+    }
+    for (var i = 0; i < numFungus; ++i) {
+        var x = random(width);
+        var y = random(height);
+        entities.push(createEntity(x, y, fungusTemplate));
     }
 }
 
@@ -159,6 +165,10 @@ function keyPressed() {
             // T
             selected = 't';
             break;
+        case 86:
+            // V
+            selected = 'v';
+            break;
     }
 }
 
@@ -181,6 +191,9 @@ function mousePressed() {
             break;
         case 't':
             entities.push(createEntity(mouseX, mouseY, turretTemplate));
+            break;
+        case 'v':
+            entities.push(createEntity(mouseX, mouseY, fungusTemplate));
             break;
     }
 }

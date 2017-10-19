@@ -13,5 +13,8 @@ A predator-prey simulation in p5.js
 Press one of these keys to select a creature, then place with the mouse:
 * B = prey
 * F = food
+* H = hive
 * P = predator
+* S = swarm
 * T = turret
+* V = fungus

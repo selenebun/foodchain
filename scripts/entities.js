@@ -138,7 +138,7 @@ var predTemplate = {
 
 var turretTemplate = {
     accAmt: 0,
-    chase: ['pred', 'prey'],
+    chase: ['pred', 'prey', 'swarm'],
     color: [232, 126, 4],
     name: 'turret',
     perception: 200,
@@ -157,7 +157,7 @@ var turretTemplate = {
 
 var bulletTemplate = {
     accAmt: 0,
-    chase: ['pred', 'prey'],
+    chase: ['pred', 'prey', 'swarm'],
     color: [34, 49, 63],
     name: 'bullet',
     nutrition: 25,
@@ -228,6 +228,29 @@ var swarmerTemplate = {
         if (random(15) >= 1) return;
         this.onEat(e, newEntities);
         e.onEaten(this, newEntities);
+    }
+};
+
+var fungusTemplate = {
+    accAmt: 0,
+    chase: ['prey'],
+    color: [102, 51, 153],
+    name: 'fungus',
+    nutrition: 500,
+    perception: 10,
+    radius: 10,
+    topSpeed: 0,
+    onEat: function(e, newEntities) {
+        console.log('aaaaa');
+        this.eat(e);
+        if (random(2) < 1) {
+            var x = this.pos.x + random(-20, 20);
+            var y = this.pos.y + random(-20, 20);
+            newEntities.push(createEntity(x, y, foodTemplate));
+        }
+        var x = this.pos.x + random(-50, 50);
+        var y = this.pos.y + random(-50, 50);
+        newEntities.push(createEntity(x, y, fungusTemplate));
     }
 };
 
