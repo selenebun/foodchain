@@ -93,7 +93,7 @@ function draw() {
         e.update();
         e.edges(width, height);
         if (e.outsideRect(0, 0, width, height)) e.kill();
-        e.hunger();
+        e.hunger(newEntities);
 
         // Draw
         if (showPerception) {
@@ -109,7 +109,7 @@ function draw() {
             var t = targets[j];
             if (e.isInside(t.pos.x, t.pos.y)) {
                 e.onEat(t, newEntities);
-                t.onEaten();
+                t.onEaten(e, newEntities);
             }
         }
     }

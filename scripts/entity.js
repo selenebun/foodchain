@@ -99,9 +99,12 @@ class Entity {
         return visible;
     }
 
-    hunger() {
+    hunger(newEntities) {
         this.nutrition--;
-        if (this.nutrition <= 0) this.kill();
+        if (this.nutrition <= 0) {
+            this.kill();
+            this.onStarve(newEntities);
+        }
     }
 
     isInside(x, y) {
@@ -126,9 +129,9 @@ class Entity {
 
     onEat(e, newEntities) {}
 
-    onEaten() {}
+    onEaten(e, newEntities) {}
 
-    onStarve() {}
+    onStarve(newEntities) {}
 
     steer(entities) {
         return createVector(0, 0);
