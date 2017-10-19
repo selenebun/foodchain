@@ -15,7 +15,7 @@ function createEntity(x, y, template) {
 
 // Steering functions
 
-function nearestTarget(entities) {
+function nearestTarget(entities, newEntities) {
     var sum = createVector(0, 0);
     // Pursuing target
     var toChase = getByType(entities, this.chase);
@@ -25,6 +25,7 @@ function nearestTarget(entities) {
             stroke(this.color[0], this.color[1], this.color[2], 127);
             line(t.pos.x, t.pos.y, this.pos.x, this.pos.y);
         }
+        this.onChase(t, newEntities);
         sum.add(this.target(t, this.chasePriority));
     }
     // Avoidance
@@ -36,6 +37,7 @@ function nearestTarget(entities) {
             stroke(0, 0, 255, 127);
             line(e.pos.x, e.pos.y, this.pos.x, this.pos.y);
         }
+        this.onFlee(e, newEntities);
         sum.add(this.target(e, this.fleePriority * -1));
     }
     return sum;
@@ -52,6 +54,7 @@ function multiTarget(entities) {
             stroke(this.color[0], this.color[1], this.color[2], 127);
             line(e.pos.x, e.pos.y, this.pos.x, this.pos.y);
         }
+        this.onChase(e, newEntities);
         sum.add(this.target(e, this.chasePriority));
     }
     // Avoidance
@@ -63,6 +66,7 @@ function multiTarget(entities) {
             stroke(0, 0, 255, 127);
             line(e.pos.x, e.pos.y, this.pos.x, this.pos.y);
         }
+        this.onFlee(e, newEntities);
         sum.add(this.target(e, this.fleePriority * -1));
     }
     return sum;
@@ -132,6 +136,43 @@ var predTemplate = {
     }
 };
 
+var turretTemplate = {
+    accAmt: 0,
+    chase: ['pred', 'prey'],
+    color: [232, 126, 4],
+    name: 'turret',
+    perception: 200,
+    radius: 20,
+    steer: nearestTarget,
+    topSpeed: 0,
+    hunger: function() {},
+    onChase: function(e, newEntities) {
+        if (random(2) >= 1) return;
+        var b = createEntity(this.pos.x, this.pos.y, bulletTemplate);
+        var unit = p5.Vector.sub(e.pos, b.pos).normalize();
+        b.vel = unit.mult(b.topSpeed);
+        newEntities.push(b);
+    }
+};
+
+var bulletTemplate = {
+    accAmt: 0,
+    chase: ['pred', 'prey'],
+    color: [34, 49, 63],
+    name: 'bullet',
+    nutrition: 25,
+    perception: 10,
+    topSpeed: 10,
+    onEatAttempt: function(e, newEntities) {
+        this.onEat(e, newEntities);
+        e.onEaten(this, newEntities);
+    },
+    onEat: function(e, newEntities) {
+        this.eat(e);
+    }
+};
+
+/*
 var fungusTemplate = {
     accAmt: 0,
     color: [102, 51, 153],
@@ -163,3 +204,4 @@ var missileTemplate = {
         newEntities.push(createEntity(x, y, missileTemplate));
     }
 };
+*/

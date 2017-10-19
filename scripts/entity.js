@@ -132,6 +132,8 @@ class Entity {
         this.alive = false;
     }
 
+    onChase(e, newEntities) {}
+
     onDeath(newEntities) {}
 
     onEatAttempt(e, newEntities) {
@@ -143,9 +145,11 @@ class Entity {
 
     onEaten(e, newEntities) {}
 
+    onFlee(e, newEntities) {}
+
     onStarve(newEntities) {}
 
-    steer(entities) {
+    steer(entities, newEntities) {
         return createVector(0, 0);
     }
 

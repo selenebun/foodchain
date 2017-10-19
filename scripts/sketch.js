@@ -5,8 +5,7 @@ var selected = 'b';
 var numFood = 30;
 var numPrey = 20;
 var numPred = 10;
-var numFungus = 0;//4;
-var numMissile = 0;//4;
+var numTurret = 1;
 
 var chaseLines = false;
 var fleeLines = false;
@@ -34,15 +33,10 @@ function initEntities() {
         var y = random(height);
         entities.push(createEntity(x, y, predTemplate));
     }
-    for (var i = 0; i < numFungus; ++i) {
+    for (var i = 0; i < numTurret; ++i) {
         var x = random(width);
         var y = random(height);
-        entities.push(createEntity(x, y, fungusTemplate));
-    }
-    for (var i = 0; i < numMissile; ++i) {
-        var x = random(width);
-        var y = random(height);
-        entities.push(createEntity(x, y, missileTemplate));
+        entities.push(createEntity(x, y, turretTemplate));
     }
 }
 
@@ -67,7 +61,7 @@ function draw() {
     background(255);
     
     var total = entities.length;
-    var numCreatures = getByType(entities, ['prey', 'pred']).length;
+    var numCreatures = getByType(entities, ['prey', 'pred', 'turret']).length;
     if (total <= 1 || total > 800 || numCreatures === 0) initEntities();
 
     if (random(5) < 1) {
@@ -85,7 +79,7 @@ function draw() {
         if (relevant.length === 0) {
             f = e.wander();
         } else {
-            f = e.steer(relevant).limit(e.accAmt);
+            f = e.steer(relevant, newEntities).limit(e.accAmt);
         }
         // Update
         e.applyForce(f);
@@ -137,10 +131,6 @@ function keyPressed() {
             // F
             selected = 'f';
             break;
-        case 77:
-            // M
-            selected = 'm';
-            break;
         case 78:
             // N
             showNutrition = !showNutrition;
@@ -149,9 +139,9 @@ function keyPressed() {
             // P
             selected = 'p';
             break;
-        case 86:
-            // V
-            selected = 'v';
+        case 84:
+            // T
+            selected = 't';
             break;
     }
 }
@@ -164,14 +154,11 @@ function mousePressed() {
         case 'f':
             entities.push(createEntity(mouseX, mouseY, foodTemplate));
             break;
-        case 'm':
-            entities.push(createEntity(mouseX, mouseY, missileTemplate));
-            break;
         case 'p':
             entities.push(createEntity(mouseX, mouseY, predTemplate));
             break;
-        case 'v':
-            entities.push(createEntity(mouseX, mouseY, fungusTemplate));
+        case 't':
+            entities.push(createEntity(mouseX, mouseY, turretTemplate));
             break;
     }
 }
