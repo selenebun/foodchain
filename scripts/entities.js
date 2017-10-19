@@ -8,6 +8,7 @@ function createEntity(x, y, template) {
         var key = keys[i];
         e[key] = template[key];
     }
+    e.template = template;
     return e;
 }
 
@@ -116,9 +117,13 @@ var predTemplate = {
         var y = this.pos.y;
         newEntities.push(createEntity(x, y, foodTemplate));
     },
-    onEat: function(e, newEntities) {
+    onEatAttempt: function(e, newEntities) {
         this.vel.mult(0);
         if (random(5) >= 1) return;
+        this.onEat(e, newEntities);
+        e.onEaten(this, newEntities);
+    },
+    onEat: function(e, newEntities) {
         this.eat(e);
         if (random(5) >= 1) return;
         var x = this.pos.x + random(-20, 20);

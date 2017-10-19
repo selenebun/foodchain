@@ -78,7 +78,6 @@ function draw() {
 
     for (var i = 0; i < entities.length; ++i) {
         var e = entities[i];
-
         // Steering
         var visible = e.getVisible(entities);
         var relevant = getByType(visible, e.chase.concat(e.flee));
@@ -88,30 +87,19 @@ function draw() {
         } else {
             f = e.steer(relevant).limit(e.accAmt);
         }
-
         // Update
         e.applyForce(f);
         e.update();
         e.edges(width, height);
         if (e.outsideRect(0, 0, width, height)) e.kill();
         e.hunger(newEntities);
-
-        // Draw
-        if (showPerception) {
-            fill(e.color[0], e.color[1], e.color[2], 31);
-            stroke(0, 31);
-            ellipse(e.pos.x, e.pos.y, e.perception * 2, e.perception * 2);
-        }
+        // Drawing
         e.draw();
-
         // Eating
         var targets = getByType(visible, e.chase);
         for (var j = 0; j < targets.length; ++j) {
             var t = targets[j];
-            if (e.isInside(t.pos.x, t.pos.y)) {
-                e.onEat(t, newEntities);
-                t.onEaten(e, newEntities);
-            }
+            if (e.isInside(t.pos.x, t.pos.y)) e.onEatAttempt(t, newEntities);
         }
     }
 

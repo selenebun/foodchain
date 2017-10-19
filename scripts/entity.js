@@ -20,11 +20,18 @@ class Entity {
         this.color = [0, 0, 0];
         this.name = 'entity';
         this.radius = 5;
+        this.template = {};
 
         this.alive = true;
     }
 
     draw() {
+        if (showPerception) {
+            var p = this.perception;
+            fill(this.color[0], this.color[1], this.color[2], 31);
+            stroke(0, 31);
+            ellipse(this.pos.x, this.pos.y, p * 2, p * 2);
+        }
         if (showNutrition) {
             var alpha = 255 * this.nutrition / this.maxNut;
             fill(this.color[0], this.color[1], this.color[2], alpha);
@@ -126,6 +133,11 @@ class Entity {
     }
 
     onDeath(newEntities) {}
+
+    onEatAttempt(e, newEntities) {
+        this.onEat(e, newEntities);
+        e.onEaten(this, newEntities);
+    }
 
     onEat(e, newEntities) {}
 

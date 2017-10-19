@@ -14,3 +14,11 @@ function getByType(entities, types) {
 function insideCircle(x, y, cx, cy, r) {
     return sq(x - cx) + sq(y - cy) < sq(r);
 }
+
+function insideRect(x, y, cx, cy, w, h) {
+    return x > cx && y > cy && x < cx + w && y < cy + h;
+}
+
+function outsideRect(x, y, cx, cy, w, h) {
+    return x < cx || y < cy || x > cx + w || y > cy + h;
+}
