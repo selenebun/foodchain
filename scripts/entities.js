@@ -85,7 +85,7 @@ var foodTemplate = {
 
 var preyTemplate = {
     accAmt: 0.5,
-    chase: ['food'],
+    chase: ['food', 'spawner'],
     chasePriority: 2,
     color: [82, 179, 217],
     name: 'prey',
@@ -104,7 +104,7 @@ var preyTemplate = {
 
 var predTemplate = {
     accAmt: 0.4,
-    chase: ['prey', 'missile'],
+    chase: ['prey', 'missile', 'spawner'],
     chasePriority: 4,
     color: [207, 0, 15],
     flee: ['pred'],
@@ -129,7 +129,7 @@ var predTemplate = {
     },
     onEat: function(e, newEntities) {
         this.eat(e);
-        if (random(5) >= 1) return;
+        if (random(5) >= 1 || e.name !== 'prey') return;
         var x = this.pos.x + random(-20, 20);
         var y = this.pos.y + random(-20, 20);
         newEntities.push(createEntity(x, y, predTemplate));
@@ -169,6 +169,28 @@ var bulletTemplate = {
     },
     onEat: function(e, newEntities) {
         this.eat(e);
+    }
+};
+
+var spawnerTemplate = {
+    accAmt: 0,
+    color: [174, 168, 211],
+    name: 'spawner',
+    radius: 30,
+    topSpeed: 0,
+    hunger: function() {},
+    onEaten: function(e, newEntities) {
+        var s = createEntity(this.pos.x, this.pos.y, spawnerTemplate);
+        s.toSpawn = e.template;
+        s.name = e.name + '-spawner';
+        s.color = e.color;
+        newEntities.push(s);
+    },
+    onFrame: function(newEntities) {
+        if (random(40) >= 1 || typeof this.toSpawn === 'undefined') return;
+        var x = this.pos.x + random(-20, 20);
+        var y = this.pos.y + random(-20, 20);
+        newEntities.push(createEntity(x, y, this.toSpawn));
     }
 };
 
