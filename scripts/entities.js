@@ -85,7 +85,7 @@ var foodTemplate = {
 
 var preyTemplate = {
     accAmt: 0.5,
-    chase: ['food', 'spawner'],
+    chase: ['food'],
     chasePriority: 2,
     color: [82, 179, 217],
     name: 'prey',
@@ -104,7 +104,7 @@ var preyTemplate = {
 
 var predTemplate = {
     accAmt: 0.4,
-    chase: ['prey', 'missile', 'spawner'],
+    chase: ['prey', 'missile'],
     chasePriority: 4,
     color: [207, 0, 15],
     flee: ['pred'],
@@ -169,6 +169,65 @@ var bulletTemplate = {
     },
     onEat: function(e, newEntities) {
         this.eat(e);
+    }
+};
+
+var hiveTemplate = {
+    accAmt: 0,
+    chase: ['pred', 'prey'],
+    color: [54, 215, 183],
+    name: 'hive',
+    perception: 150,
+    radius: 30,
+    steer: nearestTarget,
+    swarmRadius: 5,
+    swarmPerception: 75,
+    topSpeed: 0,
+    hunger: function() {},
+    onChase: function(e, newEntities) {
+        if (random(20) >= 1) return;
+        var s = createEntity(this.pos.x, this.pos.y, swarmTemplate);
+        //s.hive = this;
+        newEntities.push(s);
+    }
+};
+
+var swarmTemplate = {
+    accAmt: 0.4,
+    chase: ['pred', 'prey'],
+    color: [249, 191, 59],
+    name: 'swarm',
+    nutrition: 150,
+    perception: 75,
+    steer: nearestTarget,
+    topSpeed: 4,
+    onChase: function(e, newEntities) {
+        if (random(5) >= 1) return;
+        var s = createEntity(this.pos.x, this.pos.y, swarmerTemplate);
+        newEntities.push(s);
+    },
+    onEatAttempt: function(e, newEntities) {
+        this.vel.mult(0);
+        if (random(15) >= 1) return;
+        this.onEat(e, newEntities);
+        e.onEaten(this, newEntities);
+    }
+};
+
+var swarmerTemplate = {
+    accAmt: 0.4,
+    chase: ['pred', 'prey'],
+    color: [249, 191, 59],
+    name: 'swarmer',
+    nutrition: 25,
+    perception: 50,
+    steer: nearestTarget,
+    topSpeed: 4,
+    onEatAttempt: function(e, newEntities) {
+        this.vel.mult(0);
+        if (random(15) >= 1) return;
+        this.onEat(e, newEntities);
+        e.onEaten(this, newEntities);
     }
 };
 

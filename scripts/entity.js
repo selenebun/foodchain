@@ -141,7 +141,9 @@ class Entity {
         e.onEaten(this, newEntities);
     }
 
-    onEat(e, newEntities) {}
+    onEat(e, newEntities) {
+        this.eat(e);
+    }
 
     onEaten(e, newEntities) {}
 

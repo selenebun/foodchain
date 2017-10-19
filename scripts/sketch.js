@@ -6,6 +6,7 @@ var numFood = 30;
 var numPrey = 20;
 var numPred = 10;
 var numTurret = 0;
+var numHive = 0;
 
 var chaseLines = false;
 var fleeLines = false;
@@ -37,6 +38,11 @@ function initEntities() {
         var x = random(width);
         var y = random(height);
         entities.push(createEntity(x, y, turretTemplate));
+    }
+    for (var i = 0; i < numHive; ++i) {
+        var x = random(width);
+        var y = random(height);
+        entities.push(createEntity(x, y, hiveTemplate));
     }
 }
 
@@ -133,6 +139,10 @@ function keyPressed() {
             // F
             selected = 'f';
             break;
+        case 72:
+            // H
+            selected = 'h';
+            break;
         case 78:
             // N
             showNutrition = !showNutrition;
@@ -160,11 +170,14 @@ function mousePressed() {
         case 'f':
             entities.push(createEntity(mouseX, mouseY, foodTemplate));
             break;
+        case 'h':
+            entities.push(createEntity(mouseX, mouseY, hiveTemplate));
+            break;
         case 'p':
             entities.push(createEntity(mouseX, mouseY, predTemplate));
             break;
         case 's':
-            entities.push(createEntity(mouseX, mouseY, spawnerTemplate));
+            entities.push(createEntity(mouseX, mouseY, swarmTemplate));
             break;
         case 't':
             entities.push(createEntity(mouseX, mouseY, turretTemplate));
