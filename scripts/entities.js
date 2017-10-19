@@ -107,7 +107,7 @@ var predTemplate = {
     chase: ['prey', 'missile'],
     chasePriority: 4,
     color: [207, 0, 15],
-    flee: ['pred'],
+    flee: ['pred', 'turret', 'bullet', 'swarm'],
     fleePriority: 0.5,
     name: 'pred',
     nutrition: 200,
@@ -184,6 +184,7 @@ var hiveTemplate = {
     swarmPerception: 75,
     topSpeed: 0,
     hunger: function() {},
+    onEatAttempt: function(e, newEntities) {},
     onChase: function(e, newEntities) {
         if (random(20) >= 1) return;
         var s = createEntity(this.pos.x, this.pos.y, swarmTemplate);
@@ -275,15 +276,6 @@ var spawnerTemplate = {
         var y = this.pos.y + random(-20, 20);
         newEntities.push(createEntity(x, y, this.toSpawn));
     }
-};
-
-var fungusTemplate = {
-    accAmt: 0,
-    color: [102, 51, 153],
-    name: 'fungus',
-    nutrition: 500,
-    radius: 10,
-    topSpeed: 0
 };
 
 var missileTemplate = {
