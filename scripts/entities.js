@@ -172,6 +172,7 @@ var bulletTemplate = {
     }
 };
 
+/*
 var spawnerTemplate = {
     accAmt: 0,
     color: [174, 168, 211],
@@ -194,7 +195,6 @@ var spawnerTemplate = {
     }
 };
 
-/*
 var fungusTemplate = {
     accAmt: 0,
     color: [102, 51, 153],

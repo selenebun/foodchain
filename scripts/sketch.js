@@ -5,8 +5,7 @@ var selected = 'b';
 var numFood = 30;
 var numPrey = 20;
 var numPred = 10;
-var numTurret = 1;
-var numSpawner = 3;
+var numTurret = 0;
 
 var chaseLines = false;
 var fleeLines = false;
@@ -38,11 +37,6 @@ function initEntities() {
         var x = random(width);
         var y = random(height);
         entities.push(createEntity(x, y, turretTemplate));
-    }
-    for (var i = 0; i < numSpawner; ++i) {
-        var x = random(width);
-        var y = random(height);
-        entities.push(createEntity(x, y, spawnerTemplate));
     }
 }
 
