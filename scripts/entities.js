@@ -1,7 +1,9 @@
 function createEntity(x, y, template) {
     var e = new Entity(x, y);
     var keys = Object.keys(template);
-    e.maxNut = template.nutrition;
+    if (typeof template.nutrition !== 'undefined') {
+        e.maxNut = template.nutrition;
+    }
     for (var i = 0; i < keys.length; ++i) {
         var key = keys[i];
         e[key] = template[key];
@@ -10,73 +12,141 @@ function createEntity(x, y, template) {
 }
 
 
-function steer(targets, avoid) {
+// Steering functions
+
+function nearestTarget(entities) {
     var sum = createVector(0, 0);
-    // pursuing targets
-    /*
-    for (var i = 0; i < targets.length; ++i) {
-        if (targets[i] === this) continue;
-        sum.add(this.target(targets[i], 1));
-    }
-    */
-    if (targets.length !== 0) {
-        var targ = this.getNearest(targets);
-        if (targetLines) {
+    // Pursuing target
+    var toChase = getByType(entities, this.chase);
+    if (toChase.length !== 0) {
+        var t = this.getNearest(toChase);
+        if (chaseLines) {
             stroke(this.color[0], this.color[1], this.color[2], 127);
-            line(targ.pos.x, targ.pos.y, this.pos.x, this.pos.y);
+            line(t.pos.x, t.pos.y, this.pos.x, this.pos.y);
         }
-        sum.add(this.target(targ, this.chasePriority));
+        sum.add(this.target(t, this.chasePriority));
     }
-    // avoiding
-    for (var i = 0; i < avoid.length; ++i) {
-        if (avoid[i] === this) continue;
-        sum.add(this.target(avoid[i], this.fleePriority));
+    // Avoidance
+    var toAvoid = getByType(entities, this.flee);
+    for (var i = 0; i < toAvoid.length; ++i) {
+        var e = toAvoid[i];
+        if (e === this) continue;
+        sum.add(this.target(e, this.fleePriority * -1));
     }
-    this.acc = sum.limit(this.accAmt);
+    return sum;
+}
+
+function multiTarget(entities) {
+    var sum = createVector(0, 0);
+    // Pursuing targets
+    var toChase = getByType(entities, this.chase);
+    for (var i = 0; i < toChase.length; ++i) {
+        var e = toChase[i];
+        if (e === this) continue;
+        if (chaseLines) {
+            stroke(this.color[0], this.color[1], this.color[2], 127);
+            line(e.pos.x, e.pos.y, this.pos.x, this.pos.y);
+        }
+        sum.add(this.target(e, this.chasePriority));
+    }
+    // Avoidance
+    var toAvoid = getByType(entities, this.flee);
+    for (var i = 0; i < toAvoid.length; ++i) {
+        var e = toAvoid[i];
+        if (e === this) continue;
+        sum.add(this.target(e, this.fleePriority * -1));
+    }
+    return sum;
 }
 
 
+// Templates
+
 var foodTemplate = {
+    accAmt: 0,
     color: [135, 211, 124],
-    nutrition: 1000,
-    starve: true
+    name: 'food',
+    topSpeed: 0,
+    hunger: function() {}
 };
 
 var preyTemplate = {
     accAmt: 0.5,
-    maxSpeed: 3,
-    nutrition: 400,
+    chase: ['food'],
     chasePriority: 2,
-    fleePriority: -1,
     color: [82, 179, 217],
+    name: 'prey',
+    nutrition: 400,
+    perception: 100,
     radius: 8,
-    steer: steer
+    steer: nearestTarget,
+    topSpeed: 3,
+    onEat: function(e, newEntities) {
+        this.eat(e);
+        var x = this.pos.x + random(-20, 20);
+        var y = this.pos.y + random(-20, 20);
+        newEntities.push(createEntity(x, y, preyTemplate));
+    }
 };
 
 var predTemplate = {
     accAmt: 0.4,
-    maxSpeed: 4,
-    nutrition: 2000,
+    chase: ['prey', 'missile'],
     chasePriority: 4,
-    fleePriority: -0.5,
     color: [207, 0, 15],
+    flee: ['pred'],
+    fleePriority: 0.5,
+    name: 'pred',
+    nutrition: 200,
+    perception: 150,
     radius: 12,
-    steer: steer
+    steer: multiTarget,
+    topSpeed: 4,
+    onDeath: function(newEntities) {
+        if (random(3) >= 2) return;
+        var x = this.pos.x;
+        var y = this.pos.y;
+        newEntities.push(createEntity(x, y, foodTemplate));
+    },
+    onEat: function(e, newEntities) {
+        this.vel.mult(0);
+        if (random(5) >= 1) return;
+        this.eat(e);
+        if (random(5) >= 1) return;
+        var x = this.pos.x + random(-20, 20);
+        var y = this.pos.y + random(-20, 20);
+        newEntities.push(createEntity(x, y, predTemplate));
+    }
 };
 
 var fungusTemplate = {
-    nutrition: 500,
+    accAmt: 0,
     color: [102, 51, 153],
-    radius: 10
+    name: 'fungus',
+    nutrition: 500,
+    radius: 10,
+    topSpeed: 0
 };
 
 var missileTemplate = {
     accAmt: 1,
-    maxSpeed: 5,
-    nutrition: 300,
+    chase: ['fungus'],
     chasePriority: 2,
-    fleePriority: -0.5,
+    flee: ['pred'],
+    fleePriority: 1,
     color: [249, 191, 59],
-    radius: 8,
-    steer: steer
+    name: 'missile',
+    nutrition: 300,
+    perception: 200,
+    steer: multiTarget,
+    topSpeed: 5,
+    onEat: function(e, newEntities) {
+        this.eat(e);
+        var x = this.pos.x + random(-20, 20);
+        var y = this.pos.y + random(-20, 20);
+        newEntities.push(createEntity(x, y, missileTemplate));
+        var x = this.pos.x + random(-20, 20);
+        var y = this.pos.y + random(-20, 20);
+        newEntities.push(createEntity(x, y, missileTemplate));
+    }
 };

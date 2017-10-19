@@ -1,50 +1,80 @@
 class Entity {
     constructor(x, y) {
+        this.mass = 1;
         this.pos = createVector(x, y);
         this.vel = createVector(0, 0);
         this.acc = createVector(0, 0);
-        this.alive = true;
-        this.accAmt = 0;
-        this.maxSpeed = 0;
-        this.maxNut = 50;
+
+        this.accAmt = 0.1;
+        this.topSpeed = 10;
+
         this.nutrition = 50;
-        this.starve = true;
+        this.maxNut = this.nutrition;
+        this.perception = 0;
+
+        this.chase = [];
+        this.flee = [];
         this.chasePriority = 1;
-        this.fleePriority = -1;
+        this.fleePriority = 1;
 
         this.color = [0, 0, 0];
+        this.name = 'entity';
         this.radius = 5;
+
+        this.alive = true;
     }
 
     draw() {
-        var alpha = this.nutrition / this.maxNut * 255;
-        fill(this.color[0], this.color[1], this.color[2], alpha);
+        if (showNutrition) {
+            var alpha = 255 * this.nutrition / this.maxNut;
+            fill(this.color[0], this.color[1], this.color[2], alpha);
+        } else {
+            fill(this.color[0], this.color[1], this.color[2]);
+        }
         stroke(0);
         ellipse(this.pos.x, this.pos.y, this.radius * 2, this.radius * 2);
     }
 
-    edges() {
+    update() {
+        this.vel.add(this.acc);
+        this.vel.limit(this.topSpeed);
+        this.pos.add(this.vel);
+        this.acc.mult(0);
+    }
+
+    applyForce(f) {
+        this.acc.add(f.div(this.mass));
+    }
+
+    eat(e) {
+        if (!e.alive) return;
+        e.kill();
+        this.nutrition += e.nutrition;
+        if (this.nutrition > this.maxNut) this.nutrition = this.maxNut;
+    }
+
+    edges(width, height) {
+        var dv = -4;
         if (this.pos.x + this.radius > width) {
             this.pos.x = width - this.radius;
-            this.vel.x *= -4;
+            this.vel.x *= dv;
         }
         if (this.pos.x - this.radius < 0) {
             this.pos.x = this.radius;
-            this.vel.x *= -4;
+            this.vel.x *= dv;
         }
         if (this.pos.y + this.radius > height) {
             this.pos.y = height - this.radius;
-            this.vel.y *= -4;
+            this.vel.y *= dv;
         }
         if (this.pos.y - this.radius < 0) {
             this.pos.y = this.radius;
-            this.vel.y *= -4;
+            this.vel.y *= dv;
         }
-        this.acc.add(createVector(width / 2, height / 2).sub(this.pos).mult(0.001));
     }
 
     getNearest(entities) {
-        var lowestDist = 1000000;
+        var lowestDist = 10000;
         var entity = entities[0];
         for (var i = 0; i < entities.length; ++i) {
             var dist = entities[i].pos.dist(this.pos);
@@ -56,31 +86,64 @@ class Entity {
         return entity;
     }
 
+    getVisible(entities) {
+        var visible = [];
+        for (var i = 0; i < entities.length; ++i) {
+            var e = entities[i];
+            if (e === this) continue;
+            var c = this.pos;
+            if (insideCircle(e.pos.x, e.pos.y, c.x, c.y, this.perception)) {
+                visible.push(e);
+            }
+        }
+        return visible;
+    }
+
+    hunger() {
+        this.nutrition--;
+        if (this.nutrition <= 0) this.kill();
+    }
+
+    isInside(x, y) {
+        return insideCircle(x, y, this.pos.x, this.pos.y, this.radius);
+    }
+
+    insideRect(x, y, w, h) {
+        return this.pos.x + this.radius > x && this.pos.y + this.radius > y &&
+        this.pos.x - this.radius < x + w && this.pos.y - this.radius < y + h;
+    }
+
+    outsideRect(x, y, w, h) {
+        return this.pos.x + this.radius < x || this.pos.y + this.radius < y ||
+        this.pos.x - this.radius > x + w || this.pos.y - this.radius > y + h;
+    }
+
     kill() {
         this.alive = false;
     }
 
-    outsideBorders() {
-        return (
-            this.pos.x + this.radius < 0 || this.pos.x - this.radius > width ||
-            this.pos.y + this.radius < 0 || this.pos.y - this.radius > height
-        );
+    onDeath(newEntities) {}
+
+    onEat(e, newEntities) {}
+
+    onEaten() {}
+
+    onStarve() {}
+
+    steer(entities) {
+        return createVector(0, 0);
     }
 
-    steer(targets, avoid) {}
-
-    target(entity, mult) {
-        var dist = entity.pos.dist(this.pos);
-        var unit = p5.Vector.sub(entity.pos, this.pos).normalize();
-        var priority = 100 / dist;
-        return unit.mult(this.accAmt * mult * priority);
+    target(e, mult) {
+        var dist = e.pos.dist(this.pos);
+        var unit = p5.Vector.sub(e.pos, this.pos).normalize();
+        //var priority = 100 / dist;
+        return unit.mult(this.accAmt * mult);
     }
-    
-    update() {
-        this.vel.add(this.acc);
-        this.vel.limit(this.maxSpeed);
-        this.pos.add(this.vel);
-        if (this.starve) this.nutrition--;
-        if (this.nutrition === 0) this.kill();
+
+    wander() {
+        var angle = random(TWO_PI);
+        var mag = this.accAmt;
+        return createVector(mag * Math.cos(angle), mag * Math.sin(angle));
     }
 }
