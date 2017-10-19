@@ -9,6 +9,7 @@ var numFungus = 0;//4;
 var numMissile = 0;//4;
 
 var chaseLines = false;
+var fleeLines = false;
 var showNutrition = true;
 var showPerception = false;
 
@@ -131,6 +132,10 @@ function keyPressed() {
         case 16:
             // Shift
             showPerception = !showPerception;
+            break;
+        case 18:
+            // Alt
+            fleeLines = !fleeLines;
             break;
         case 32:
             // Space bar

@@ -31,6 +31,10 @@ function nearestTarget(entities) {
     for (var i = 0; i < toAvoid.length; ++i) {
         var e = toAvoid[i];
         if (e === this) continue;
+        if (fleeLines) {
+            stroke(0, 0, 255, 127);
+            line(e.pos.x, e.pos.y, this.pos.x, this.pos.y);
+        }
         sum.add(this.target(e, this.fleePriority * -1));
     }
     return sum;
@@ -54,6 +58,10 @@ function multiTarget(entities) {
     for (var i = 0; i < toAvoid.length; ++i) {
         var e = toAvoid[i];
         if (e === this) continue;
+        if (fleeLines) {
+            stroke(0, 0, 255, 127);
+            line(e.pos.x, e.pos.y, this.pos.x, this.pos.y);
+        }
         sum.add(this.target(e, this.fleePriority * -1));
     }
     return sum;
