@@ -147,6 +147,8 @@ class Entity {
 
     onFlee(e, newEntities) {}
 
+    onFrame(newEntities) {}
+
     onStarve(newEntities) {}
 
     steer(entities, newEntities) {

@@ -89,6 +89,8 @@ function draw() {
         e.hunger(newEntities);
         // Drawing
         e.draw();
+        // Misc
+        e.onFrame(newEntities);
         // Eating
         var targets = getByType(visible, e.chase);
         for (var j = 0; j < targets.length; ++j) {
