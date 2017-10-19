@@ -14,3 +14,4 @@ Press one of these keys to select a creature, then place with the mouse:
 * B = prey
 * F = food
 * P = predator
+* T = turret
