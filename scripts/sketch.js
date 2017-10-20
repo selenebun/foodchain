@@ -73,7 +73,9 @@ function draw() {
     background(255);
     
     var total = entities.length;
-    var numCreatures = getByType(entities, ['prey', 'pred', 'swarm']).length;
+    var numCreatures = getByType(entities, [
+        'prey', 'pred', 'bullet', 'swarm', 'swarmer'
+    ]).length;
     if (total <= 1 || total > 800 || numCreatures === 0) initEntities();
 
     if (random(5) < 1) {

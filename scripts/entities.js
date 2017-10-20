@@ -174,29 +174,31 @@ var bulletTemplate = {
 
 var hiveTemplate = {
     accAmt: 0,
-    chase: ['pred', 'prey'],
+    chase: ['pred', 'prey', 'fungus'],
     color: [54, 215, 183],
     name: 'hive',
-    perception: 150,
+    nutrition: 500,
+    perception: 100,
     radius: 30,
     steer: nearestTarget,
     swarmRadius: 5,
     swarmPerception: 75,
     topSpeed: 0,
-    hunger: function() {},
     onEatAttempt: function(e, newEntities) {},
     onChase: function(e, newEntities) {
-        if (random(20) >= 1) return;
+        if (random(15) >= 1) return;
         var s = createEntity(this.pos.x, this.pos.y, swarmTemplate);
-        //s.hive = this;
+        s.hive = this;
         newEntities.push(s);
     }
 };
 
 var swarmTemplate = {
     accAmt: 0.4,
-    chase: ['pred', 'prey'],
+    chase: ['pred', 'prey', 'fungus'],
+    chasePriority: 4,
     color: [249, 191, 59],
+    flee: ['swarm'],
     name: 'swarm',
     nutrition: 150,
     perception: 75,
@@ -207,17 +209,29 @@ var swarmTemplate = {
         var s = createEntity(this.pos.x, this.pos.y, swarmerTemplate);
         newEntities.push(s);
     },
+    onDeath: function(newEntities) {
+        if (random(3) >= 2) return;
+        var x = this.pos.x;
+        var y = this.pos.y;
+        newEntities.push(createEntity(x, y, foodTemplate));
+    },
     onEatAttempt: function(e, newEntities) {
         this.vel.mult(0);
         if (random(15) >= 1) return;
-        this.onEat(e, newEntities);
+        if (typeof this.hive === 'undefined') {
+            this.onEat(e, newEntities);
+        } else {
+            this.hive.onEat(e, newEntities);
+        }
         e.onEaten(this, newEntities);
+        if (random(23) >= 1) return;
+        newEntities.push(createEntity(this.pos.x, this.pos.y, hiveTemplate));
     }
 };
 
 var swarmerTemplate = {
     accAmt: 0.4,
-    chase: ['pred', 'prey'],
+    chase: ['pred', 'prey', 'fungus'],
     color: [249, 191, 59],
     name: 'swarmer',
     nutrition: 25,
