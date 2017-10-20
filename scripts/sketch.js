@@ -2,12 +2,25 @@ var entities;
 var newEntities;
 var selected = 'b';
 
-var numFood = 30;
-var numPrey = 20;
-var numPred = 10;
-var numTurret = 0;
-var numHive = 0;
-var numFungus = 0;
+var presets = [
+    {
+        'numFood': 30,
+        'numPrey': 20,
+        'numPred': 10,
+        'numTurret': 0,
+        'numHive': 0,
+        'numFungus': 0
+    },
+    {
+        'numFood': 30,
+        'numPrey': 20,
+        'numPred': 10,
+        'numTurret': 0,
+        'numHive': 1,
+        'numFungus': 4
+    }
+];
+var currentPreset = 0;
 
 var chaseLines = false;
 var fleeLines = false;
@@ -18,34 +31,35 @@ var showPerception = false;
 // Misc functions
 
 function initEntities() {
+    var preset = presets[currentPreset];
     entities = [];
     newEntities = [];
-    for (var i = 0; i < numFood; ++i) {
+    for (var i = 0; i < preset.numFood; ++i) {
         var x = random(width);
         var y = random(height);
         entities.push(createEntity(x, y, foodTemplate));
     }
-    for (var i = 0; i < numPrey; ++i) {
+    for (var i = 0; i < preset.numPrey; ++i) {
         var x = random(width);
         var y = random(height);
         entities.push(createEntity(x, y, preyTemplate));
     }
-    for (var i = 0; i < numPred; ++i) {
+    for (var i = 0; i < preset.numPred; ++i) {
         var x = random(width);
         var y = random(height);
         entities.push(createEntity(x, y, predTemplate));
     }
-    for (var i = 0; i < numTurret; ++i) {
+    for (var i = 0; i < preset.numTurret; ++i) {
         var x = random(width);
         var y = random(height);
         entities.push(createEntity(x, y, turretTemplate));
     }
-    for (var i = 0; i < numHive; ++i) {
+    for (var i = 0; i < preset.numHive; ++i) {
         var x = random(width);
         var y = random(height);
         entities.push(createEntity(x, y, hiveTemplate));
     }
-    for (var i = 0; i < numFungus; ++i) {
+    for (var i = 0; i < preset.numFungus; ++i) {
         var x = random(width);
         var y = random(height);
         entities.push(createEntity(x, y, fungusTemplate));
@@ -138,6 +152,20 @@ function keyPressed() {
         case 32:
             // Space bar
             chaseLines = !chaseLines;
+            break;
+        case 48:
+            // 0
+            if (currentPreset !== 0) {
+                currentPreset = 0;
+                initEntities();
+            }
+            break;
+        case 49:
+            // 1
+            if (currentPreset !== 1) {
+                currentPreset = 1;
+                initEntities();
+            }
             break;
         case 66:
             // B

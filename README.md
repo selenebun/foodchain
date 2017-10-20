@@ -8,6 +8,7 @@ A predator-prey simulation in p5.js
 * Alt to toggle avoidance lines
 * Spacebar to toggle targeting lines
 * N to toggle nutrition level fade
+* 0-9 to select a preset
 
 ### Creature types:
 Press one of these keys to select a creature, then place with the mouse:
