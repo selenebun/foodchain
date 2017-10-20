@@ -249,8 +249,8 @@ var fungusTemplate = {
             var y = this.pos.y + random(-20, 20);
             newEntities.push(createEntity(x, y, foodTemplate));
         }
-        var x = this.pos.x + random(-50, 50);
-        var y = this.pos.y + random(-50, 50);
+        var x = this.pos.x + random(-100, 100);
+        var y = this.pos.y + random(-100, 100);
         newEntities.push(createEntity(x, y, fungusTemplate));
     }
 };
