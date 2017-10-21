@@ -180,8 +180,8 @@ function keyPressed() {
             // Enter
             initEntities();
             break;
-        case 16:
-            // Shift
+        case 17:
+            // Ctrl
             showPerception = !showPerception;
             break;
         case 18:
@@ -214,6 +214,10 @@ function keyPressed() {
             // F
             selected = 'f';
             break;
+        case 71:
+            // G
+            showChart = !showChart;
+            break;
         case 72:
             // H
             selected = 'h';
@@ -237,10 +241,6 @@ function keyPressed() {
         case 86:
             // V
             selected = 'v';
-            break;
-        case 220:
-            // Backslash
-            showChart = !showChart;
             break;
     }
 }
