@@ -9,6 +9,7 @@ A predator-prey simulation in p5.js
 * Spacebar to toggle targeting lines
 * N to toggle nutrition level fade
 * 0-9 to select a preset
+* Backslash to toggle species pie chart
 
 ### Creature types:
 Press one of these keys to select a creature, then place with the mouse:

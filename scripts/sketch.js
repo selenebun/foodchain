@@ -26,6 +26,7 @@ var chaseLines = false;
 var fleeLines = false;
 var showNutrition = true;
 var showPerception = false;
+var showChart = false;
 
 
 // Misc functions
@@ -63,6 +64,42 @@ function initEntities() {
         var x = random(width);
         var y = random(height);
         entities.push(createEntity(x, y, fungusTemplate));
+    }
+}
+
+function pieChart(entities) {
+    var numFood = getByType(entities, ['food']).length;
+    var numPrey = getByType(entities, ['prey']).length;
+    var numPred = getByType(entities, ['pred']).length;
+    var numHive = getByType(entities, ['hive']).length;
+    var numFungus = getByType(entities, ['fungus']).length;
+    var numCreatures = getByType(entities, [
+        'food', 'prey', 'pred', 'hive', 'fungus'
+    ]).length;
+
+    var nums = [numFood, numPrey, numHive, numPred, numFungus];
+    var colors = [
+        foodTemplate.color, preyTemplate.color, swarmTemplate.color,
+        predTemplate.color, fungusTemplate.color
+    ];
+    var angles = [];
+    for (var i = 0; i < nums.length; ++i) {
+        angles[i] = nums[i] / numCreatures * TWO_PI;
+    }
+
+    var diam = 100;
+    var lastAngle = 0;
+    for (var i = 0; i < angles.length; ++i) {
+        if (angles[i] === 0) continue;
+        // Arc
+        fill(colors[i].concat(127));
+        stroke(0, 127);
+        arc(width - 75, 75, diam, diam, lastAngle, lastAngle + angles[i]);
+        // Line
+        var dx = width - 75 + diam / 2 * Math.cos(lastAngle);
+        var dy = 75 + diam / 2 * Math.sin(lastAngle);
+        line(width - 75, 75, dx, dy);
+        lastAngle += angles[i];
     }
 }
 
@@ -126,6 +163,8 @@ function draw() {
             if (e.isInside(t.pos.x, t.pos.y)) e.onEatAttempt(t, newEntities);
         }
     }
+
+    if (showChart) pieChart(entities);
 
     removeDead();
     entities = entities.concat(newEntities);
@@ -198,6 +237,10 @@ function keyPressed() {
         case 86:
             // V
             selected = 'v';
+            break;
+        case 220:
+            // Backslash
+            showChart = !showChart;
             break;
     }
 }
