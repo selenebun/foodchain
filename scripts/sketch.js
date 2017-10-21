@@ -71,10 +71,10 @@ function pieChart(entities) {
     var numFood = getByType(entities, ['food']).length;
     var numPrey = getByType(entities, ['prey']).length;
     var numPred = getByType(entities, ['pred']).length;
-    var numHive = getByType(entities, ['hive']).length;
+    var numHive = getByType(entities, ['hive', 'swarm']).length;
     var numFungus = getByType(entities, ['fungus']).length;
     var numCreatures = getByType(entities, [
-        'food', 'prey', 'pred', 'hive', 'fungus'
+        'food', 'prey', 'pred', 'hive', 'swarm', 'fungus'
     ]).length;
 
     var nums = [numFood, numPrey, numHive, numPred, numFungus];
