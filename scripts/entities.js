@@ -256,7 +256,6 @@ var fungusTemplate = {
     radius: 10,
     topSpeed: 0,
     onEat: function(e, newEntities) {
-        console.log('aaaaa');
         this.eat(e);
         if (random(2) < 1) {
             var x = this.pos.x + random(-20, 20);
