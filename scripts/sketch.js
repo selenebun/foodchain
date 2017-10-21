@@ -87,18 +87,18 @@ function pieChart(entities) {
         angles[i] = nums[i] / numCreatures * TWO_PI;
     }
 
-    var diam = 100;
+    var diam = 150;
     var lastAngle = 0;
     for (var i = 0; i < angles.length; ++i) {
         if (angles[i] === 0) continue;
         // Arc
         fill(colors[i].concat(127));
         stroke(0, 127);
-        arc(width - 75, 75, diam, diam, lastAngle, lastAngle + angles[i]);
+        arc(width - 100, 100, diam, diam, lastAngle, lastAngle + angles[i]);
         // Line
-        var dx = width - 75 + diam / 2 * Math.cos(lastAngle);
-        var dy = 75 + diam / 2 * Math.sin(lastAngle);
-        line(width - 75, 75, dx, dy);
+        var dx = width - 100 + diam / 2 * Math.cos(lastAngle);
+        var dy = 100 + diam / 2 * Math.sin(lastAngle);
+        line(width - 100, 100, dx, dy);
         lastAngle += angles[i];
     }
 }
