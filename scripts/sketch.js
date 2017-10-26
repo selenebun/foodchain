@@ -37,6 +37,8 @@ var fleeLines = false;
 var showNutrition = true;
 var showPerception = false;
 var showChart = false;
+
+var buttonVisible = true;
 var sidebarOpen = false;
 
 
@@ -80,6 +82,7 @@ function initEntities() {
 
 function drawEntity(selected) {
     if (sidebarOpen && mouseX < 200) return;
+    if (buttonVisible && mouseX < 200 && mouseY < 30) return;
     switch(selected) {
         case 'b':
             entities.push(createEntity(mouseX, mouseY, preyTemplate));
@@ -322,8 +325,13 @@ function keyPressed() {
             break;
         case 81:
             // Q
-            var sb = document.getElementById('sidebar-toggle');
-            sb.style.display = sb.style.display === 'none' ? 'inline' : 'none';
+            buttonVisible = !buttonVisible;
+            var b = document.getElementById('sidebar-toggle');
+            if (buttonVisible) {
+                b.style.display = 'inline';
+            } else {
+                b.style.display = 'none';
+            }
             break;
         case 83:
             // S
