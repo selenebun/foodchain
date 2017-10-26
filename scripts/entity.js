@@ -29,7 +29,11 @@ class Entity {
         if (showPerception) {
             var p = this.perception;
             fill(this.color[0], this.color[1], this.color[2], 31);
-            stroke(0, 31);
+            if (dispMode === 1 || dispMode === 2) {
+                noStroke();
+            } else {
+                stroke(0, 31);
+            }
             ellipse(this.pos.x, this.pos.y, p * 2, p * 2);
         }
         if (showNutrition) {
