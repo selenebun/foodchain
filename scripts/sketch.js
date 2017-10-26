@@ -132,6 +132,11 @@ function removeDead() {
 function setup() {
     createCanvas(window.innerWidth, window.innerHeight);
     initEntities();
+    // Add text input for mobile device controls
+    if (isMobile.any) {
+        var inp = document.createElement('input');
+        document.body.appendChild(inp);
+    }
 }
 
 function draw() {

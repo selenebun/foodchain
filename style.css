@@ -6,3 +6,9 @@ html, body {
 canvas {
     display: block;
 }
+
+input {
+    left: 1em;
+    position: fixed;
+    top: 1em;
+}
