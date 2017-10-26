@@ -32,6 +32,7 @@ var currentPreset = 0;
 
 var chaseLines = false;
 var dispMode = 0;
+var motionBlur = false;
 var fleeLines = false;
 var showNutrition = true;
 var showPerception = false;
@@ -140,10 +141,18 @@ function setup() {
 }
 
 function draw() {
-    if (dispMode === 0) {
-        background(255);
+    if (motionBlur) {
+        if (dispMode === 0) {
+            background(255, 63);
+        } else {
+            background(0, 63);
+        }
     } else {
-        background(0);
+        if (dispMode === 0) {
+            background(255);
+        } else {
+            background(0);
+        }
     }
     
     var total = entities.length;
@@ -268,6 +277,10 @@ function keyPressed() {
         case 78:
             // N
             showNutrition = !showNutrition;
+            break;
+        case 79:
+            // O
+            motionBlur = !motionBlur;
             break;
         case 80:
             // P

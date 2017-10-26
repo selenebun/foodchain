@@ -10,6 +10,7 @@ A predator-prey simulation in p5.js
 * G to toggle species pie chart
 * M to switch display mode
 * N to toggle nutrition level fade
+* O to toggle motion blur
 * 0-9 to select a preset
 
 ### Creature types:
