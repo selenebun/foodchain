@@ -41,7 +41,7 @@ function nearestTarget(entities, newEntities) {
         if (e === this) continue;
         if (fleeLines) {
             if (dispMode === 1) {
-                stroke(0, 0, 255, 191);
+                stroke(0, 0, 255, 255);
             } else if (dispMode === 2) {
                 stroke(255, 255, 255);
             } else {
@@ -82,7 +82,7 @@ function multiTarget(entities) {
         if (e === this) continue;
         if (fleeLines) {
             if (dispMode === 1) {
-                stroke(0, 0, 255, 191);
+                stroke(0, 0, 255, 255);
             } else if (dispMode === 2) {
                 stroke(255, 255, 255);
             } else {
