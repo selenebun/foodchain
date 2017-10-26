@@ -241,6 +241,14 @@ function draw() {
 }
 
 
+// Misc p5 functions
+
+function windowResized() {
+    resizeCanvas(windowWidth, windowHeight);
+    initEntities();
+}
+
+
 // User input
 
 function keyPressed() {
