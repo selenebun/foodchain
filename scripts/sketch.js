@@ -77,6 +77,32 @@ function initEntities() {
     }
 }
 
+function drawEntity(selected) {
+    switch(selected) {
+        case 'b':
+            entities.push(createEntity(mouseX, mouseY, preyTemplate));
+            break;
+        case 'f':
+            entities.push(createEntity(mouseX, mouseY, foodTemplate));
+            break;
+        case 'h':
+            entities.push(createEntity(mouseX, mouseY, hiveTemplate));
+            break;
+        case 'p':
+            entities.push(createEntity(mouseX, mouseY, predTemplate));
+            break;
+        case 's':
+            entities.push(createEntity(mouseX, mouseY, swarmTemplate));
+            break;
+        case 't':
+            entities.push(createEntity(mouseX, mouseY, turretTemplate));
+            break;
+        case 'v':
+            entities.push(createEntity(mouseX, mouseY, fungusTemplate));
+            break;
+    }
+}
+
 function pieChart(entities) {
     var numFood = getByType(entities, ['food']).length;
     var numPrey = getByType(entities, ['prey']).length;
@@ -302,27 +328,9 @@ function keyPressed() {
 }
 
 function mousePressed() {
-    switch(selected) {
-        case 'b':
-            entities.push(createEntity(mouseX, mouseY, preyTemplate));
-            break;
-        case 'f':
-            entities.push(createEntity(mouseX, mouseY, foodTemplate));
-            break;
-        case 'h':
-            entities.push(createEntity(mouseX, mouseY, hiveTemplate));
-            break;
-        case 'p':
-            entities.push(createEntity(mouseX, mouseY, predTemplate));
-            break;
-        case 's':
-            entities.push(createEntity(mouseX, mouseY, swarmTemplate));
-            break;
-        case 't':
-            entities.push(createEntity(mouseX, mouseY, turretTemplate));
-            break;
-        case 'v':
-            entities.push(createEntity(mouseX, mouseY, fungusTemplate));
-            break;
-    }
+    drawEntity(selected);
+}
+
+function mouseDragged() {
+    drawEntity(selected);
 }
