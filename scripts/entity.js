@@ -38,8 +38,14 @@ class Entity {
         } else {
             fill(this.color[0], this.color[1], this.color[2]);
         }
-        stroke(0);
-        ellipse(this.pos.x, this.pos.y, this.radius * 2, this.radius * 2);
+        if (dispMode === 0) {
+            stroke(0);
+        } else if (dispMode === 1) {
+            noStroke();
+        }
+        if (dispMode !== 2) {
+            ellipse(this.pos.x, this.pos.y, this.radius * 2, this.radius * 2);
+        }
     }
 
     update() {

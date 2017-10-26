@@ -18,11 +18,20 @@ var presets = [
         'numTurret': 0,
         'numHive': 1,
         'numFungus': 4
+    },
+    {
+        'numFood': 30,
+        'numPrey': 20,
+        'numPred': 0,
+        'numTurret': 0,
+        'numHive': 0,
+        'numFungus': 0
     }
 ];
 var currentPreset = 0;
 
 var chaseLines = false;
+var dispMode = 0;
 var fleeLines = false;
 var showNutrition = true;
 var showPerception = false;
@@ -92,8 +101,13 @@ function pieChart(entities) {
     for (var i = 0; i < angles.length; ++i) {
         if (angles[i] === 0) continue;
         // Arc
-        fill(colors[i].concat(127));
-        stroke(0, 127);
+        if (dispMode === 0) {
+            fill(colors[i].concat(127));
+            stroke(0, 127);
+        } else {
+            fill(colors[i].concat(191));
+            noStroke();
+        }
         arc(width - 100, 100, diam, diam, lastAngle, lastAngle + angles[i]);
         // Line
         var dx = width - 100 + diam / 2 * Math.cos(lastAngle);
@@ -121,7 +135,11 @@ function setup() {
 }
 
 function draw() {
-    background(255);
+    if (dispMode === 0) {
+        background(255);
+    } else {
+        background(0);
+    }
     
     var total = entities.length;
     var numCreatures = getByType(entities, [
@@ -206,6 +224,13 @@ function keyPressed() {
                 initEntities();
             }
             break;
+        case 50:
+            // 2
+            if (currentPreset !== 2) {
+                currentPreset = 2;
+                initEntities();
+            }
+            break;
         case 66:
             // B
             selected = 'b';
@@ -221,6 +246,11 @@ function keyPressed() {
         case 72:
             // H
             selected = 'h';
+            break;
+        case 77:
+            // M
+            dispMode++;
+            if (dispMode > 2) dispMode = 0;
             break;
         case 78:
             // N
