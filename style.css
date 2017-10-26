@@ -21,9 +21,10 @@ canvas {
     background-color: #22313F;
     display: none;
     height: 100%;
-    width: 160px;
+    overflow: scroll;
     padding: 20px;
     position: fixed;
+    width: 160px;
 }
 
 #sidebar h1 {
