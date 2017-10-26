@@ -250,7 +250,15 @@ function keyPressed() {
         case 77:
             // M
             dispMode++;
-            if (dispMode > 2) dispMode = 0;
+            if (dispMode === 2) {
+                chaseLines = true;
+                fleeLines = true;
+            }
+            if (dispMode > 2) {
+                dispMode = 0;
+                chaseLines = false;
+                fleeLines = false;
+            }
             break;
         case 78:
             // N
