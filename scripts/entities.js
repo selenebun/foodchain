@@ -22,7 +22,9 @@ function nearestTarget(entities, newEntities) {
     if (toChase.length !== 0) {
         var t = this.getNearest(toChase);
         if (chaseLines) {
-            if (dispMode === 2) {
+            if (dispMode === 1) {
+                stroke(this.color[0], this.color[1], this.color[2], 191);
+            } else if (dispMode === 2) {
                 stroke(255, 255, 255);
             } else {
                 stroke(this.color[0], this.color[1], this.color[2], 127);
@@ -38,7 +40,9 @@ function nearestTarget(entities, newEntities) {
         var e = toAvoid[i];
         if (e === this) continue;
         if (fleeLines) {
-            if (dispMode === 2) {
+            if (dispMode === 1) {
+                stroke(0, 0, 255, 191);
+            } else if (dispMode === 2) {
                 stroke(255, 255, 255);
             } else {
                 stroke(0, 0, 255, 127);
@@ -59,7 +63,9 @@ function multiTarget(entities) {
         var e = toChase[i];
         if (e === this) continue;
         if (chaseLines) {
-            if (dispMode === 2) {
+            if (dispMode === 1) {
+                stroke(this.color[0], this.color[1], this.color[2], 191);
+            } else if (dispMode === 2) {
                 stroke(255, 255, 255);
             } else {
                 stroke(this.color[0], this.color[1], this.color[2], 127);
@@ -75,7 +81,9 @@ function multiTarget(entities) {
         var e = toAvoid[i];
         if (e === this) continue;
         if (fleeLines) {
-            if (dispMode === 2) {
+            if (dispMode === 1) {
+                stroke(0, 0, 255, 191);
+            } else if (dispMode === 2) {
                 stroke(255, 255, 255);
             } else {
                 stroke(0, 0, 255, 127);
