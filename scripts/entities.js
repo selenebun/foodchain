@@ -119,10 +119,11 @@ var preyTemplate = {
     steer: nearestTarget,
     topSpeed: 3,
     onEat: function(e, newEntities) {
-        this.eat(e);
-        var x = this.pos.x + random(-20, 20);
-        var y = this.pos.y + random(-20, 20);
-        newEntities.push(createEntity(x, y, preyTemplate));
+        if (this.eat(e)) {
+            var x = this.pos.x + random(-20, 20);
+            var y = this.pos.y + random(-20, 20);
+            newEntities.push(createEntity(x, y, preyTemplate));
+        }
     }
 };
 
@@ -152,11 +153,12 @@ var predTemplate = {
         e.onEaten(this, newEntities);
     },
     onEat: function(e, newEntities) {
-        this.eat(e);
-        if (random(5) >= 1 || e.name !== 'prey') return;
-        var x = this.pos.x + random(-20, 20);
-        var y = this.pos.y + random(-20, 20);
-        newEntities.push(createEntity(x, y, predTemplate));
+        if (this.eat(e)) {
+            if (random(5) >= 1 || e.name !== 'prey') return;
+            var x = this.pos.x + random(-20, 20);
+            var y = this.pos.y + random(-20, 20);
+            newEntities.push(createEntity(x, y, predTemplate));
+        }
     }
 };
 
@@ -280,15 +282,16 @@ var fungusTemplate = {
     radius: 10,
     topSpeed: 0,
     onEat: function(e, newEntities) {
-        this.eat(e);
-        if (random(2) < 1) {
-            var x = this.pos.x + random(-20, 20);
-            var y = this.pos.y + random(-20, 20);
-            newEntities.push(createEntity(x, y, foodTemplate));
+        if (this.eat(e)) {
+            if (random(2) < 1) {
+                var x = this.pos.x + random(-20, 20);
+                var y = this.pos.y + random(-20, 20);
+                newEntities.push(createEntity(x, y, foodTemplate));
+            }
+            var x = this.pos.x + random(-100, 100);
+            var y = this.pos.y + random(-100, 100);
+            newEntities.push(createEntity(x, y, fungusTemplate));
         }
-        var x = this.pos.x + random(-100, 100);
-        var y = this.pos.y + random(-100, 100);
-        newEntities.push(createEntity(x, y, fungusTemplate));
     }
 };
 

@@ -60,10 +60,11 @@ class Entity {
     }
 
     eat(e) {
-        if (!e.alive) return;
+        if (!e.alive) return false;
         e.kill();
         this.nutrition += e.nutrition;
         if (this.nutrition > this.maxNut) this.nutrition = this.maxNut;
+        return true;
     }
 
     edges(width, height) {
