@@ -7,8 +7,26 @@ canvas {
     display: block;
 }
 
-input {
-    left: 1em;
+#sidebar-toggle {
+    background-color: #22313F;
+    color: #19B5FE;
+    text-shadow: 1px 1px 0px #000000;
+    height: 30px;
     position: fixed;
-    top: 1em;
+    width: 200px;
+    z-index: 1;
+}
+
+#sidebar {
+    background-color: #22313F;
+    display: none;
+    height: 100%;
+    width: 160px;
+    padding: 20px;
+    position: fixed;
+}
+
+#sidebar h1 {
+    color: #19B5FE;
+    text-shadow: 1px 1px 0px #000000;
 }

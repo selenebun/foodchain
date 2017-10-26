@@ -37,6 +37,7 @@ var fleeLines = false;
 var showNutrition = true;
 var showPerception = false;
 var showChart = false;
+var sidebarOpen = false;
 
 
 // Misc functions
@@ -78,6 +79,7 @@ function initEntities() {
 }
 
 function drawEntity(selected) {
+    if (sidebarOpen && mouseX < 200) return;
     switch(selected) {
         case 'b':
             entities.push(createEntity(mouseX, mouseY, preyTemplate));
@@ -100,6 +102,17 @@ function drawEntity(selected) {
         case 'v':
             entities.push(createEntity(mouseX, mouseY, fungusTemplate));
             break;
+    }
+}
+
+function toggleSidebar() {
+    sidebarOpen = !sidebarOpen;
+    var sidebar = document.getElementById('sidebar');
+
+    if (sidebarOpen) {
+        sidebar.style.display = "block";
+    } else {
+        sidebar.style.display = "none";
     }
 }
 
@@ -159,11 +172,6 @@ function removeDead() {
 function setup() {
     createCanvas(window.innerWidth, window.innerHeight);
     initEntities();
-    // Add text input for mobile device controls
-    if (isMobile.any) {
-        var inp = document.createElement('input');
-        document.body.appendChild(inp);
-    }
 }
 
 function draw() {
@@ -311,6 +319,11 @@ function keyPressed() {
         case 80:
             // P
             selected = 'p';
+            break;
+        case 81:
+            // Q
+            var sb = document.getElementById('sidebar-toggle');
+            sb.style.display = sb.style.display === 'none' ? 'inline' : 'none';
             break;
         case 83:
             // S

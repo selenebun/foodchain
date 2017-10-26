@@ -5,12 +5,40 @@
     <meta name="author" content="xithiox">
     <title>foodchain</title>
     <link href="style.css" rel="stylesheet">
-    <script src="scripts/lib/isMobile.min.js" defer></script>
     <script src="scripts/lib/p5.min.js" defer></script>
     <script src="scripts/utils.js" defer></script>
     <script src="scripts/entity.js" defer></script>
     <script src="scripts/entities.js" defer></script>
     <script src="scripts/sketch.js" defer></script>
   </head>
-  <body></body>
+  <body>
+    <button id="sidebar-toggle" onclick="toggleSidebar()">Controls</button>
+    <div id="sidebar">
+      <h1>General</h1>
+      <button onclick="initEntities()">Clear screen</button><br>
+      <button onclick="dispMode++;if(dispMode===2){chaseLines=true;fleeLines=true}if(dispMode>2){dispMode=0;chaseLines=false;fleeLines=false}">Cycle display mode</button><br>
+      <button onclick="motionBlur=!motionBlur">Toggle motion blur</button><br>
+      <button onclick="showChart=!showChart">Toggle species graph</button>
+
+      <h1>Display</h1>
+      <button onclick="fleeLines=!fleeLines">Toggle avoidance</button><br>
+      <button onclick="showNutrition=!showNutrition">Toggle nutrition</button><br>
+      <button onclick="showPerception=!showPerception">Toggle perception</button><br>
+      <button onclick="chaseLines=!chaseLines">Toggle targeting</button>
+
+      <h1>Presets</h1>
+      <button onclick="if(currentPreset!==0){currentPreset=0;initEntities()}">Default</button><br>
+      <button onclick="if(currentPreset!==1){currentPreset=1;initEntities()}">Diverse</button><br>
+      <button onclick="if(currentPreset!==2){currentPreset=2;initEntities()}">Prey only</button>
+
+      <h1>Entities</h1>
+      <button onclick="selected='f'">Food</button><br>
+      <button onclick="selected='v'">Fungus</button><br>
+      <button onclick="selected='h'">Hive</button><br>
+      <button onclick="selected='p'">Predator</button><br>
+      <button onclick="selected='b'">Prey</button><br>
+      <button onclick="selected='s'">Swarm</button><br>
+      <button onclick="selected='t'">Turret</button>
+    </div>
+  </body>
 </html>

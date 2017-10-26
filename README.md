@@ -11,6 +11,7 @@ A predator-prey simulation in p5.js
 * M to switch display mode (light mode, dark mode, line mode)
 * N to toggle nutrition level fade
 * O to toggle motion blur
+* Q to toggle sidebar button
 * 0-9 to select a preset
 
 ### Creature types:
