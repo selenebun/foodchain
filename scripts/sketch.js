@@ -7,7 +7,6 @@ var presets = [
         'numFood': 30,
         'numPrey': 20,
         'numPred': 10,
-        'numTurret': 0,
         'numHive': 0,
         'numFungus': 0
     },
@@ -15,7 +14,6 @@ var presets = [
         'numFood': 30,
         'numPrey': 20,
         'numPred': 10,
-        'numTurret': 0,
         'numHive': 1,
         'numFungus': 4
     },
@@ -23,7 +21,6 @@ var presets = [
         'numFood': 30,
         'numPrey': 20,
         'numPred': 0,
-        'numTurret': 0,
         'numHive': 0,
         'numFungus': 0
     }
@@ -98,9 +95,6 @@ function drawEntity(selected) {
             break;
         case 's':
             entities.push(createEntity(mouseX, mouseY, swarmTemplate));
-            break;
-        case 't':
-            entities.push(createEntity(mouseX, mouseY, turretTemplate));
             break;
         case 'v':
             entities.push(createEntity(mouseX, mouseY, fungusTemplate));
@@ -306,6 +300,10 @@ function keyPressed() {
             // H
             selected = 'h';
             break;
+        case 76:
+            // L
+            selected = 'l';
+            break;
         case 77:
             // M
             dispMode++;
@@ -344,10 +342,6 @@ function keyPressed() {
         case 83:
             // S
             selected = 's';
-            break;
-        case 84:
-            // T
-            selected = 't';
             break;
         case 86:
             // V

@@ -162,42 +162,6 @@ var predTemplate = {
     }
 };
 
-var turretTemplate = {
-    accAmt: 0,
-    chase: ['pred', 'prey', 'swarm'],
-    color: [232, 126, 4],
-    name: 'turret',
-    perception: 200,
-    radius: 20,
-    steer: nearestTarget,
-    topSpeed: 0,
-    hunger: function() {},
-    onChase: function(e, newEntities) {
-        if (random(2) >= 1) return;
-        var b = createEntity(this.pos.x, this.pos.y, bulletTemplate);
-        var unit = p5.Vector.sub(e.pos, b.pos).normalize();
-        b.vel = unit.mult(b.topSpeed);
-        newEntities.push(b);
-    }
-};
-
-var bulletTemplate = {
-    accAmt: 0,
-    chase: ['pred', 'prey', 'swarm'],
-    color: [34, 49, 63],
-    name: 'bullet',
-    nutrition: 25,
-    perception: 10,
-    topSpeed: 10,
-    onEatAttempt: function(e, newEntities) {
-        this.onEat(e, newEntities);
-        e.onEaten(this, newEntities);
-    },
-    onEat: function(e, newEntities) {
-        this.eat(e);
-    }
-};
-
 var hiveTemplate = {
     accAmt: 0,
     chase: ['pred', 'prey', 'fungus'],
@@ -338,6 +302,42 @@ var missileTemplate = {
         var x = this.pos.x + random(-20, 20);
         var y = this.pos.y + random(-20, 20);
         newEntities.push(createEntity(x, y, missileTemplate));
+    }
+};
+
+var turretTemplate = {
+    accAmt: 0,
+    chase: ['pred', 'prey', 'swarm'],
+    color: [232, 126, 4],
+    name: 'turret',
+    perception: 200,
+    radius: 20,
+    steer: nearestTarget,
+    topSpeed: 0,
+    hunger: function() {},
+    onChase: function(e, newEntities) {
+        if (random(2) >= 1) return;
+        var b = createEntity(this.pos.x, this.pos.y, bulletTemplate);
+        var unit = p5.Vector.sub(e.pos, b.pos).normalize();
+        b.vel = unit.mult(b.topSpeed);
+        newEntities.push(b);
+    }
+};
+
+var bulletTemplate = {
+    accAmt: 0,
+    chase: ['pred', 'prey', 'swarm'],
+    color: [34, 49, 63],
+    name: 'bullet',
+    nutrition: 25,
+    perception: 10,
+    topSpeed: 10,
+    onEatAttempt: function(e, newEntities) {
+        this.onEat(e, newEntities);
+        e.onEaten(this, newEntities);
+    },
+    onEat: function(e, newEntities) {
+        this.eat(e);
     }
 };
 */

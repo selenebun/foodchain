@@ -21,5 +21,4 @@ Press one of these keys to select a creature, then place with the mouse:
 * H = hive
 * P = predator
 * S = swarm
-* T = turret
 * V = fungus
