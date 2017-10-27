@@ -196,7 +196,7 @@ function draw() {
     var numCreatures = getByType(entities, [
         'prey', 'pred', 'bullet', 'swarm', 'swarmer'
     ]).length;
-    if (total <= 1 || total > 800 || numCreatures === 0) initEntities();
+    if (total <= 1 || total > 1000 || numCreatures === 0) initEntities();
 
     if (random(5) < 1) {
         var x = random(width);
