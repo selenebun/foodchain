@@ -78,8 +78,8 @@ function initEntities() {
 }
 
 function drawEntity(selected) {
-    if (sidebarOpen && mouseX < 200) return;
-    if (buttonVisible && mouseX < 200 && mouseY < 30) return;
+    if (sidebarOpen && mouseX < 220) return;
+    if (buttonVisible && mouseX < 220 && mouseY < 30) return;
     switch(selected) {
         case 'b':
             entities.push(createEntity(mouseX, mouseY, preyTemplate));
