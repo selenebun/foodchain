@@ -207,7 +207,7 @@ var swarmTemplate = {
     },
     onEatAttempt: function(e, newEntities) {
         if (typeof this.hive !== 'undefined' && !this.hive.alive) {
-            this.hive = 'undefined';
+            this.hive = undefined;
         }
         this.vel.mult(0);
         if (random(15) >= 1) return;
