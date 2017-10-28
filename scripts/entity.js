@@ -164,6 +164,8 @@ class Entity {
 
     onStarve(newEntities) {}
 
+    onWander(newEntities) {}
+
     steer(entities, newEntities) {
         return createVector(0, 0);
     }
@@ -175,7 +177,8 @@ class Entity {
         return unit.mult(this.accAmt * mult);
     }
 
-    wander() {
+    wander(newEntities) {
+        this.onWander(newEntities)
         var angle = random(TWO_PI);
         var mag = this.accAmt;
         return createVector(mag * Math.cos(angle), mag * Math.sin(angle));

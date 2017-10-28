@@ -260,6 +260,64 @@ var fungusTemplate = {
 };
 
 /*
+var snakeTemplate = {
+    accAmt: 0,
+    chase: ['prey', 'fungus', 'swarm'],
+    color: [232, 126, 4],
+    flee: ['pred'],
+    name: 'snake',
+    nutrition: 300,
+    perception: 200,
+    radius: 12,
+    steer: nearestTarget,
+    topSpeed: 2,
+    onChase: function(e, newEntities) {
+        this.accAmt = 0.3;
+        this.topSpeed = 4;
+    },
+    onEat(e, newEntities) {
+        this.eat(e);
+        if (random(10) >= 1) return;
+        newEntities.push(createEntity(this.pos.x, this.pos.y, snakeTemplate));
+    },
+    onFlee: function(e, newEntities) {
+        this.accAmt = 0.3;
+        this.topSpeed = 4;
+    },
+    onFrame: function(newEntities) {
+        var x = this.pos.x + random(-20, 20);
+        var y = this.pos.y + random(-20, 20);
+        var t = createEntity(x, y, tailTemplate);
+        t.nutrition = this.nutrition > 50 ? 50 : this.nutrition;
+        t.maxNut = t.nutrition;
+        t.head = this;
+        newEntities.push(t);
+    },
+    onWander: function(newEntities) {
+        this.accAmt = 0;
+        this.topSpeed = 2;
+    }
+};
+
+var tailTemplate = {
+    accAmt: 0,
+    chase: ['prey', 'fungus', 'swarm'],
+    color: [232, 126, 4],
+    name: 'snakeTail',
+    nutrition: 50,
+    perception: 12,
+    radius: 12,
+    topSpeed: 0,
+    onEatAttempt: function(e, newEntities) {
+        if (typeof this.head === 'undefined') {
+            this.onEat(e, newEntities);
+        } else {
+            this.head.onEat(e, newEntities);
+        }
+        e.onEaten(this, newEntities);
+    }
+};
+
 var spawnerTemplate = {
     accAmt: 0,
     color: [174, 168, 211],
@@ -302,42 +360,6 @@ var missileTemplate = {
         var x = this.pos.x + random(-20, 20);
         var y = this.pos.y + random(-20, 20);
         newEntities.push(createEntity(x, y, missileTemplate));
-    }
-};
-
-var turretTemplate = {
-    accAmt: 0,
-    chase: ['pred', 'prey', 'swarm'],
-    color: [232, 126, 4],
-    name: 'turret',
-    perception: 200,
-    radius: 20,
-    steer: nearestTarget,
-    topSpeed: 0,
-    hunger: function() {},
-    onChase: function(e, newEntities) {
-        if (random(2) >= 1) return;
-        var b = createEntity(this.pos.x, this.pos.y, bulletTemplate);
-        var unit = p5.Vector.sub(e.pos, b.pos).normalize();
-        b.vel = unit.mult(b.topSpeed);
-        newEntities.push(b);
-    }
-};
-
-var bulletTemplate = {
-    accAmt: 0,
-    chase: ['pred', 'prey', 'swarm'],
-    color: [34, 49, 63],
-    name: 'bullet',
-    nutrition: 25,
-    perception: 10,
-    topSpeed: 10,
-    onEatAttempt: function(e, newEntities) {
-        this.onEat(e, newEntities);
-        e.onEaten(this, newEntities);
-    },
-    onEat: function(e, newEntities) {
-        this.eat(e);
     }
 };
 */

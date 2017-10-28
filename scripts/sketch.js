@@ -205,7 +205,7 @@ function draw() {
         var relevant = getByType(visible, e.chase.concat(e.flee));
         var f;
         if (relevant.length === 0) {
-            f = e.wander();
+            f = e.wander(newEntities);
         } else {
             f = e.steer(relevant, newEntities).limit(e.accAmt);
         }
@@ -299,10 +299,6 @@ function keyPressed() {
         case 72:
             // H
             selected = 'h';
-            break;
-        case 76:
-            // L
-            selected = 'l';
             break;
         case 77:
             // M
