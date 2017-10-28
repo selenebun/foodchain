@@ -129,7 +129,7 @@ var preyTemplate = {
 
 var predTemplate = {
     accAmt: 0.4,
-    chase: ['prey', 'missile'],
+    chase: ['prey'],
     chasePriority: 4,
     color: [207, 0, 15],
     flee: ['pred', 'turret', 'bullet', 'swarm'],
@@ -206,6 +206,9 @@ var swarmTemplate = {
         newEntities.push(createEntity(x, y, foodTemplate));
     },
     onEatAttempt: function(e, newEntities) {
+        if (typeof this.hive !== 'undefined' && !this.hive.alive) {
+            this.hive = 'undefined';
+        }
         this.vel.mult(0);
         if (random(15) >= 1) return;
         if (typeof this.hive === 'undefined') {
@@ -216,6 +219,8 @@ var swarmTemplate = {
         e.onEaten(this, newEntities);
         if (random(23) >= 1) return;
         newEntities.push(createEntity(this.pos.x, this.pos.y, hiveTemplate));
+        if (typeof this.hive !== 'undefined') return;
+        newEntities.push(createEntity(this.pos.x, this.pos.y, swarmTemplate));
     }
 };
 
