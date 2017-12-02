@@ -1,4 +1,5 @@
 html, body {
+    background-color: #000;
     margin: 0;
     padding: 0;
 }
@@ -7,27 +8,36 @@ canvas {
     display: block;
 }
 
-#sidebar-toggle {
+
+/* Menu sidebar */
+
+#menu-button {
     background-color: #22313F;
     color: #19B5FE;
-    text-shadow: 1px 1px 0px #000000;
     height: 30px;
     position: fixed;
+    text-shadow: 1px 1px 0px #000;
+    top: 0;
     width: 220px;
+    z-index: 2;
+}
+
+#menu {
+    background-color: #22313F;
+    bottom: 0;
+    display: none;
+    left: 0;
+    max-height: 100%;
+    overflow-y: auto;
+    padding: 20px;
+    position: fixed;
+    top: 30px;
+    width: 180px;
     z-index: 1;
 }
 
-#sidebar {
-    background-color: #22313F;
-    display: none;
-    height: 100%;
-    overflow: scroll;
-    padding: 20px;
-    position: fixed;
-    width: 180px;
-}
-
-#sidebar h1 {
+#menu h1 {
     color: #19B5FE;
-    text-shadow: 1px 1px 0px #000000;
+    margin: 0;
+    text-shadow: 1px 1px 0px #000;
 }

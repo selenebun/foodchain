@@ -12,32 +12,41 @@
     <script src="scripts/sketch.js" defer></script>
   </head>
   <body>
-    <button id="sidebar-toggle" onclick="toggleSidebar()">Controls</button>
-    <div id="sidebar">
+    <button id="menu-button" onclick="toggleMenu()">Controls (Q)</button>
+    <div id="menu">
       <h1>General</h1>
-      <button onclick="initEntities()">Clear screen (Enter)</button><br>
-      <button onclick="dispMode++;if(dispMode===2){chaseLines=true;fleeLines=true}if(dispMode>2){dispMode=0;chaseLines=false;fleeLines=false}">Cycle display mode (M)</button><br>
-      <button onclick="motionBlur=!motionBlur">Toggle motion blur (O)</button><br>
-      <button onclick="showChart=!showChart">Toggle species graph (G)</button>
+      <p>
+        <button onclick="initEntities()">Clear screen (Enter)</button><br>
+        <button onclick="lineMode=!lineMode">Cycle display mode (M)</button><br>
+        <button onclick="motionBlur=!motionBlur">Toggle motion blur (O)</button><br>
+        <button onclick="showChart=!showChart">Toggle species graph (G)</button>
+      </p>
 
       <h1>Display</h1>
-      <button onclick="fleeLines=!fleeLines">Toggle avoidance (Alt)</button><br>
-      <button onclick="showNutrition=!showNutrition">Toggle nutrition (N)</button><br>
-      <button onclick="showPerception=!showPerception">Toggle perception (Ctrl)</button><br>
-      <button onclick="chaseLines=!chaseLines">Toggle targeting (Space)</button>
+      <p>
+        <button onclick="avoidLines=!avoidLines">Toggle avoidance (Alt)</button><br>
+        <button onclick="showNutrition=!showNutrition">Toggle nutrition (N)</button><br>
+        <button onclick="showPerception=!showPerception">Toggle perception (Ctrl)</button><br>
+        <button onclick="chaseLines=!chaseLines">Toggle targeting (Space)</button>
+      </p>
 
       <h1>Presets</h1>
-      <button onclick="if(currentPreset!==0){currentPreset=0;initEntities()}">Default (0)</button><br>
-      <button onclick="if(currentPreset!==1){currentPreset=1;initEntities()}">Diverse (1)</button><br>
-      <button onclick="if(currentPreset!==2){currentPreset=2;initEntities()}">Prey only (2)</button>
+      <p>
+        <button onclick="if(currentPreset!==0){currentPreset=0;initEntities()}">Default (0)</button><br>
+        <button onclick="if(currentPreset!==1){currentPreset=1;initEntities()}">Diverse (1)</button><br>
+        <button onclick="if(currentPreset!==2){currentPreset=2;initEntities()}">Prey (2)</button><br>
+        <button onclick="if(currentPreset!==3){currentPreset=3;initEntities()}">Fungus (3)</button><br>
+      </p>
 
       <h1>Entities</h1>
-      <button onclick="selected='f'">Food (f)</button><br>
-      <button onclick="selected='v'">Fungus (v)</button><br>
-      <button onclick="selected='h'">Hive (h)</button><br>
-      <button onclick="selected='p'">Predator (p)</button><br>
-      <button onclick="selected='b'">Prey (b)</button><br>
-      <button onclick="selected='s'">Swarm (s)</button>
+      <p>
+        <button onclick="selected='food'">Food (F)</button><br>
+        <button onclick="selected='fungus'">Fungus (V)</button><br>
+        <button onclick="selected='hive'">Hive (H)</button><br>
+        <button onclick="selected='pred'">Predator (P)</button><br>
+        <button onclick="selected='prey'">Prey (B)</button><br>
+        <button onclick="selected='swarm'">Swarm (S)</button>
+      </p>
     </div>
   </body>
 </html>

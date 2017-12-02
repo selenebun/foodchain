@@ -1,165 +1,190 @@
 var entities;
 var newEntities;
-var selected = 'b';
+var selected = 'prey';
 
 var presets = [
     {
-        'numFood': 30,
-        'numPrey': 20,
-        'numPred': 10,
-        'numHive': 0,
-        'numFungus': 0
+        num: {
+            food: 30,
+            pred: 10,
+            prey: 20
+        },
+        custom: []
     },
     {
-        'numFood': 30,
-        'numPrey': 20,
-        'numPred': 10,
-        'numHive': 1,
-        'numFungus': 4
+        num: {
+            food: 30,
+            fungus: 4,
+            hive: 1,
+            pred: 10,
+            prey: 20
+        },
+        custom: []
     },
     {
-        'numFood': 30,
-        'numPrey': 20,
-        'numPred': 0,
-        'numHive': 0,
-        'numFungus': 0
+        num: {
+            food: 30,
+            prey: 20
+        },
+        custom: []
+    },
+    {
+        num: {
+            prey: 20
+        },
+        custom: [
+            {
+                name: 'fungus',
+                x: 0,
+                y: 0 
+            },
+            {
+                name: 'fungus',
+                x: 100,
+                y: 100
+            },
+            {
+                name: 'fungus',
+                x: 200,
+                y: 200
+            },
+            {
+                name: 'fungus',
+                x: 300,
+                y: 300
+            },
+            {
+                name: 'fungus',
+                x: 400,
+                y: 400
+            }
+        ]
     }
 ];
 var currentPreset = 0;
 
+var avoidLines = false;
 var chaseLines = false;
-var dispMode = 0;
+var lineMode = false;
 var motionBlur = false;
-var fleeLines = false;
+var showChart = false;
 var showNutrition = true;
 var showPerception = false;
-var showChart = false;
 
-var buttonVisible = true;
+var menuVisible = true;
 var sidebarOpen = false;
 
 
 // Misc functions
 
+// Set position to inside map and adjust velocity
+function bounceOffEdges(e) {
+    var dv = -4;
+    if (e.pos.x - e.radius < 0) {
+        e.pos.x = e.radius;
+        e.vel.x *= dv;
+    }
+    if (e.pos.x + e.radius > width) {
+        e.pos.x = width - e.radius;
+        e.vel.x *= dv;
+    }
+    if (e.pos.y - e.radius < 0) {
+        e.pos.y = e.radius;
+        e.vel.y *= dv;
+    }
+    if (e.pos.y + e.radius > height) {
+        e.pos.y = height - e.radius;
+        e.vel.y *= dv;
+    }
+}
+
+// Create entity at mouse position
+function drawEntity() {
+    if (sidebarOpen && mouseX < 220) return;
+    if (menuVisible && mouseX < 220 && mouseY < 30) return;
+    entities.push(createEntity(mouseX, mouseY, templates[selected]));
+}
+
 function initEntities() {
-    var preset = presets[currentPreset];
     entities = [];
     newEntities = [];
-    for (var i = 0; i < preset.numFood; ++i) {
-        var x = random(width);
-        var y = random(height);
-        entities.push(createEntity(x, y, foodTemplate));
+    // Setup map from preset
+    var preset = presets[currentPreset];
+    var keys = Object.keys(preset.num);
+    for (var i = 0; i < keys.length; i++) {
+        var template = keys[i];
+        var count = preset.num[template];
+        for (var j = 0; j < count; j++) {
+            var x = random(width);
+            var y = random(height);
+            entities.push(createEntity(x, y, templates[template]));
+        }
     }
-    for (var i = 0; i < preset.numPrey; ++i) {
-        var x = random(width);
-        var y = random(height);
-        entities.push(createEntity(x, y, preyTemplate));
-    }
-    for (var i = 0; i < preset.numPred; ++i) {
-        var x = random(width);
-        var y = random(height);
-        entities.push(createEntity(x, y, predTemplate));
-    }
-    for (var i = 0; i < preset.numTurret; ++i) {
-        var x = random(width);
-        var y = random(height);
-        entities.push(createEntity(x, y, turretTemplate));
-    }
-    for (var i = 0; i < preset.numHive; ++i) {
-        var x = random(width);
-        var y = random(height);
-        entities.push(createEntity(x, y, hiveTemplate));
-    }
-    for (var i = 0; i < preset.numFungus; ++i) {
-        var x = random(width);
-        var y = random(height);
-        entities.push(createEntity(x, y, fungusTemplate));
+
+    // Spawn custom entities
+    for (var i = 0; i < preset.custom.length; i++) {
+        var e = preset.custom[i];
+        entities.push(createEntity(e.x, e.y, templates[e.name]));
     }
 }
 
-function drawEntity(selected) {
-    if (sidebarOpen && mouseX < 220) return;
-    if (buttonVisible && mouseX < 220 && mouseY < 30) return;
-    switch(selected) {
-        case 'b':
-            entities.push(createEntity(mouseX, mouseY, preyTemplate));
-            break;
-        case 'f':
-            entities.push(createEntity(mouseX, mouseY, foodTemplate));
-            break;
-        case 'h':
-            entities.push(createEntity(mouseX, mouseY, hiveTemplate));
-            break;
-        case 'p':
-            entities.push(createEntity(mouseX, mouseY, predTemplate));
-            break;
-        case 's':
-            entities.push(createEntity(mouseX, mouseY, swarmTemplate));
-            break;
-        case 'v':
-            entities.push(createEntity(mouseX, mouseY, fungusTemplate));
-            break;
-    }
+function isOutsideMap(e) {
+    return isOutsideRect(e.pos.x, e.pos.y, 0, 0, width, height);
 }
 
-function toggleSidebar() {
-    sidebarOpen = !sidebarOpen;
-    var sidebar = document.getElementById('sidebar');
-
-    if (sidebarOpen) {
-        sidebar.style.display = "block";
-    } else {
-        sidebar.style.display = "none";
-    }
-}
-
+// Draw pie chart to show ratio of each type of entity
 function pieChart(entities) {
-    var numFood = getByType(entities, ['food']).length;
-    var numPrey = getByType(entities, ['prey']).length;
-    var numPred = getByType(entities, ['pred']).length;
-    var numHive = getByType(entities, ['hive', 'swarm']).length;
-    var numFungus = getByType(entities, ['fungus']).length;
-    var numCreatures = getByType(entities, [
+    var total = getByName(entities, [
         'food', 'prey', 'pred', 'hive', 'swarm', 'fungus'
     ]).length;
-
-    var nums = [numFood, numPrey, numHive, numPred, numFungus];
-    var colors = [
-        foodTemplate.color, preyTemplate.color, swarmTemplate.color,
-        predTemplate.color, fungusTemplate.color
+    var nums = [
+        getByName(entities, 'food').length,
+        getByName(entities, 'prey').length,
+        getByName(entities, ['hive', 'swarm']).length,
+        getByName(entities, 'pred').length,
+        getByName(entities, 'fungus').length,
     ];
+    var colors = [
+        templates.food.color, templates.prey.color, templates.swarm.color,
+        templates.pred.color, templates.fungus.color
+    ];
+    
+    // Calculate angles
     var angles = [];
-    for (var i = 0; i < nums.length; ++i) {
-        angles[i] = nums[i] / numCreatures * TWO_PI;
+    for (var i = 0; i < nums.length; i++) {
+        angles[i] = nums[i] / total * TWO_PI;
     }
 
+    // Draw pie chart
     var diam = 150;
     var lastAngle = 0;
-    for (var i = 0; i < angles.length; ++i) {
+    for (var i = 0; i < angles.length; i++) {
         if (angles[i] === 0) continue;
         // Arc
-        if (dispMode === 0) {
-            fill(colors[i].concat(127));
-            stroke(0, 127);
-        } else {
-            fill(colors[i].concat(191));
-            noStroke();
-        }
+        fill(colors[i].concat(191));
+        noStroke();
         arc(width - 100, 100, diam, diam, lastAngle, lastAngle + angles[i]);
-        // Line
-        var dx = width - 100 + diam / 2 * Math.cos(lastAngle);
-        var dy = 100 + diam / 2 * Math.sin(lastAngle);
-        line(width - 100, 100, dx, dy);
         lastAngle += angles[i];
     }
 }
 
-function removeDead() {
-    for (var i = entities.length - 1; i >= 0; --i) {
+// Clear dead entities from entities array
+function removeDead(entities) {
+    for (var i = entities.length - 1; i >= 0; i--) {
         var e = entities[i];
         if (e.alive) continue;
         entities.splice(i, 1);
         e.onDeath(newEntities);
+    }
+}
+
+function toggleMenu() {
+    sidebarOpen = !sidebarOpen;
+    var m = document.getElementById('menu');
+    if (sidebarOpen && menuVisible) {
+        m.style.display = 'block';
+    } else {
+        m.style.display = 'none';
     }
 }
 
@@ -172,64 +197,62 @@ function setup() {
 }
 
 function draw() {
+    // Make background slightly transparent for motion blur
     if (motionBlur) {
-        if (dispMode === 0) {
-            background(255, 63);
-        } else {
-            background(0, 63);
-        }
+        background(0, 63);
     } else {
-        if (dispMode === 0) {
-            background(255);
-        } else {
-            background(0);
-        }
+        background(0);
     }
-    
-    var total = entities.length;
-    var numCreatures = getByType(entities, [
-        'prey', 'pred', 'bullet', 'swarm', 'swarmer'
-    ]).length;
-    if (total <= 1 || total > 1000 || numCreatures === 0) initEntities();
 
+    // Restart if there are not too many entities or too few dynamic entities
+    var total = entities.length;
+    var numDynamic = getByName(entities, [
+        'pred', 'prey', 'swarm', 'swarmer'
+    ]).length;
+    if (total <= 0 || total > 1200 || numDynamic === 0) initEntities();
+
+    // Randomly spawn food on map
     if (random(5) < 1) {
         var x = random(width);
         var y = random(height);
-        entities.push(createEntity(x, y, foodTemplate));
+        entities.push(createEntity(x, y, templates.food));
     }
 
-    for (var i = 0; i < entities.length; ++i) {
+    // Update and draw all entities
+    for (var i = 0; i < entities.length; i++) {
         var e = entities[i];
         // Steering
         var visible = e.getVisible(entities);
-        var relevant = getByType(visible, e.chase.concat(e.flee));
+        var names = e.toChase.concat(e.toEat).concat(e.toFlee);
+        var relevant = getByName(visible, names);
         var f;
         if (relevant.length === 0) {
             f = e.wander(newEntities);
         } else {
-            f = e.steer(relevant, newEntities).limit(e.accAmt);
+            f = e.steer(relevant, newEntities);
         }
         // Update
-        e.applyForce(f);
+        e.applyForce(f.limit(e.accAmt));
         e.update();
-        e.edges(width, height);
-        if (e.outsideRect(0, 0, width, height)) e.kill();
+        bounceOffEdges(e);
+        if (isOutsideMap(e)) e.kill();
         e.hunger(newEntities);
-        // Drawing
-        e.draw();
+        // Draw
+        e.draw(lineMode, showPerception, showNutrition);
         // Misc
         e.onFrame(newEntities);
         // Eating
-        var targets = getByType(visible, e.chase);
-        for (var j = 0; j < targets.length; ++j) {
+        var targets = getByName(visible, e.toEat);
+        for (var j = 0; j < targets.length; j++) {
             var t = targets[j];
-            if (e.isInside(t.pos.x, t.pos.y)) e.onEatAttempt(t, newEntities);
+            if (e.contains(t.pos.x, t.pos.y)) e.onEatAttempt(t, newEntities);
         }
     }
 
+    // Draw pie chart
     if (showChart) pieChart(entities);
 
-    removeDead();
+    removeDead(entities);
     entities = entities.concat(newEntities);
     newEntities = [];
 }
@@ -257,40 +280,36 @@ function keyPressed() {
             break;
         case 18:
             // Alt
-            fleeLines = !fleeLines;
+            avoidLines = !avoidLines;
             break;
         case 32:
-            // Space bar
+            // Spacebar
             chaseLines = !chaseLines;
             break;
         case 48:
-            // 0
-            if (currentPreset !== 0) {
-                currentPreset = 0;
-                initEntities();
-            }
-            break;
         case 49:
-            // 1
-            if (currentPreset !== 1) {
-                currentPreset = 1;
-                initEntities();
-            }
-            break;
         case 50:
-            // 2
-            if (currentPreset !== 2) {
-                currentPreset = 2;
+        case 51:
+        case 52:
+        case 53:
+        case 54:
+        case 55:
+        case 56:
+        case 57:
+            // 0-9
+            var n = keyCode - 48;
+            if (currentPreset !== n && presets.length > n) {
+                currentPreset = n;
                 initEntities();
             }
             break;
         case 66:
             // B
-            selected = 'b';
+            selected = 'prey';
             break;
         case 70:
             // F
-            selected = 'f';
+            selected = 'food';
             break;
         case 71:
             // G
@@ -298,19 +317,17 @@ function keyPressed() {
             break;
         case 72:
             // H
-            selected = 'h';
+            selected = 'hive';
             break;
         case 77:
             // M
-            dispMode++;
-            if (dispMode === 2) {
+            lineMode = !lineMode;
+            if (lineMode) {
+                avoidLines = true;
                 chaseLines = true;
-                fleeLines = true;
-            }
-            if (dispMode > 2) {
-                dispMode = 0;
+            } else {
+                avoidLines = false;
                 chaseLines = false;
-                fleeLines = false;
             }
             break;
         case 78:
@@ -323,33 +340,35 @@ function keyPressed() {
             break;
         case 80:
             // P
-            selected = 'p';
+            selected = 'pred';
             break;
         case 81:
             // Q
-            buttonVisible = !buttonVisible;
-            var b = document.getElementById('sidebar-toggle');
-            if (buttonVisible) {
+            menuVisible = !menuVisible;
+            var b = document.getElementById('menu-button');
+            var m = document.getElementById('menu');
+            if (menuVisible) {
                 b.style.display = 'inline';
             } else {
                 b.style.display = 'none';
+                m.style.display = 'none';
             }
             break;
         case 83:
             // S
-            selected = 's';
+            selected = 'swarm';
             break;
         case 86:
             // V
-            selected = 'v';
+            selected = 'fungus';
             break;
     }
 }
 
 function mousePressed() {
-    drawEntity(selected);
+    drawEntity();
 }
 
 function mouseDragged() {
-    drawEntity(selected);
+    drawEntity();
 }
