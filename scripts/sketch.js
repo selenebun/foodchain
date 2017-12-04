@@ -223,7 +223,7 @@ function draw() {
         var e = entities[i];
         // Steering
         var visible = e.getVisible(entities);
-        var names = e.toChase.concat(e.toEat).concat(e.toFlee);
+        var names = e.toChase.concat(e.toEat).concat(e.toAvoid);
         var relevant = getByName(visible, names);
         var f;
         if (relevant.length === 0) {

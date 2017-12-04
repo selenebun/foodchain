@@ -36,26 +36,28 @@ function nearestTarget(entities, newEntities) {
     var targets = getByName(entities, this.toChase);
     if (targets.length > 0) {
         var e = this.getNearest(targets);
-        if (chaseLines) {
-            if (lineMode) {
-                stroke(255, 255, 255);
-            } else {
-                stroke(this.color[0], this.color[1], this.color[2], 127);
+        if (e !== this) {
+            if (chaseLines) {
+                if (lineMode) {
+                    stroke(255);
+                } else {
+                    stroke(this.color[0], this.color[1], this.color[2], 127);
+                }
+                line(e.pos.x, e.pos.y, this.pos.x, this.pos.y);
             }
-            line(e.pos.x, e.pos.y, this.pos.x, this.pos.y);
+            this.onChase(e, newEntities);
+            sum.add(this.target(e, this.chasePriority));
         }
-        this.onChase(e, newEntities);
-        sum.add(this.target(e, this.chasePriority));
     }
 
     // Avoidance
     targets = getByName(entities, this.toAvoid);
     for (var i = 0; i < targets.length; i++) {
-        var e = toAvoid[i];
+        var e = targets[i];
         if (e === this) continue;
         if (avoidLines) {
             if (lineMode) {
-                stroke(255, 255, 255);
+                stroke(255);
             } else {
                 stroke(0, 0, 255);
             }
@@ -78,7 +80,7 @@ function multiTarget(entities, newEntities) {
         if (e === this) continue;
         if (chaseLines) {
             if (lineMode) {
-                stroke(255, 255, 255);
+                stroke(255);
             } else {
                 stroke(this.color[0], this.color[1], this.color[2], 191);
             }
@@ -95,7 +97,7 @@ function multiTarget(entities, newEntities) {
         if (e === this) continue;
         if (avoidLines) {
             if (lineMode) {
-                stroke(255, 255, 255);
+                stroke(255);
             } else {
                 stroke(0, 0, 255);
             }
