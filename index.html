@@ -17,7 +17,7 @@
       <h1>General</h1>
       <p>
         <button onclick="initEntities()">Clear screen (Enter)</button><br>
-        <button onclick="lineMode=!lineMode">Cycle display mode (M)</button><br>
+        <button onclick="lineMode=!lineMode;if(lineMode){avoidLines=true;chaseLines=true;}else{avoidLines=false;chaseLines=false}">Cycle display mode (M)</button><br>
         <button onclick="motionBlur=!motionBlur">Toggle motion blur (O)</button><br>
         <button onclick="showChart=!showChart">Toggle species graph (G)</button>
       </p>
