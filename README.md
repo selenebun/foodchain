@@ -1,5 +1,6 @@
 # foodchain
-A predator-prey simulation in p5.js that can be played [here](https://xithiox.github.io/foodchain/).
+A predator-prey simulation in p5.js that can be played
+[here](https://rsaihe.github.io/foodchain).
 
 ### Controls:
 If you do not have a keyboard, a menu may be used inside the simulation.
